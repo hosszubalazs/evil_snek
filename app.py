@@ -3,7 +3,9 @@ import numpy
 import cv2
 from mss import mss
 
-monitor = {"top": 160, "left": 160, "width": 160, "height": 135}
+# Please start Diablo according to the resolution configured here
+# Optimized for full HD screens, you might need to fiddle with the coordinates to properly set the capture.
+monitor = {"top": 320, "left": 590, "width": 640 , "height": 480}
 
 sct = mss()
 print("Press q to exit.")
