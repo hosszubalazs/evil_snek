@@ -5,4 +5,4 @@ This whole thing is heavily based on : [Python plays Grand Theft Auto V](https:/
 ## Tooling
 
 - [OpenCV 4.0](https://pypi.org/project/opencv-python/) -> Process the image
-- [MSS](https://pypi.org/project/mss/) -> Grab the image
+- [MSS](https://pypi.org/project/mss/) -> Grab the image, [docs here help a lot](https://python-mss.readthedocs.io/examples.html#opencv-numpy)
