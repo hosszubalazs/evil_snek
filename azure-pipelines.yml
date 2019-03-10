@@ -37,11 +37,12 @@ jobs:
   - script: pylint evil_snek
     displayName: 'Run PyLint analysis'
 
-  - task: PublishTestResults@2
-    inputs:
-      testResultsFiles: '**/test-results.xml'
-      testRunTitle: 'Python $(python.version)'
-    condition: succeededOrFailed()
+# No tests yet -> No test results
+#  - task: PublishTestResults@2
+#    inputs:
+#      testResultsFiles: '**/test-results.xml'
+#      testRunTitle: 'Python $(python.version)'
+#    condition: succeededOrFailed()
 
 - job: 'Publish'
   dependsOn: 'Test'
