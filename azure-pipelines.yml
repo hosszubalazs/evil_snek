@@ -37,6 +37,9 @@ jobs:
       pytest tests --doctest-modules --junitxml=junit/test-results.xml
     displayName: 'pytest'
 
+  - script: pylint evil_snek
+    displayName: 'Run PyLint analysis'
+
   - task: PublishTestResults@2
     inputs:
       testResultsFiles: '**/test-results.xml'
