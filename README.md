@@ -4,6 +4,10 @@ This repository is an attempt at creating a bot that plays Diablo 1. The game is
 
 This idea is heavily based on : [Python plays Grand Theft Auto V](https://www.youtube.com/watch?v=ks4MPfMq8aQ)
 
+## Project health
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=hosszubalazs_evil_snek&metric=alert_status)](https://sonarcloud.io/dashboard?id=hosszubalazs_evil_snek)
+
 ## User Guide
 
 1. Obtain [Diablo](https://www.gog.com/game/diablo) from GoG
