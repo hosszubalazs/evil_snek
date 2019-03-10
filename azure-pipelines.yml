@@ -34,7 +34,7 @@ jobs:
 #      pytest tests --doctest-modules --junitxml=junit/test-results.xml
 #    displayName: 'pytest'
 
-  - script: python -m pylint evil_snek
+  - script: pwd && ls -halt && python -m pylint evil_snek
     displayName: 'Run PyLint analysis'
 
 # No tests yet -> No test results
