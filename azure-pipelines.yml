@@ -28,10 +28,11 @@ jobs:
   - script: python -m pip install --upgrade pip && pip install -r requirements.txt
     displayName: 'Install dependencies'
 
-  - script: |
-      pip install pytest
-      pytest tests --doctest-modules --junitxml=junit/test-results.xml
-    displayName: 'pytest'
+# No testing is actually present so far. Commenting this part out as a shame-reminder.
+#  - script: |
+#      pip install pytest
+#      pytest tests --doctest-modules --junitxml=junit/test-results.xml
+#    displayName: 'pytest'
 
   - script: pylint evil_snek
     displayName: 'Run PyLint analysis'
