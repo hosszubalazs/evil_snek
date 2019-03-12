@@ -66,12 +66,12 @@ def interaction():
     MK_LBUTTON = 0x0001
 
     WM_KEYDOWN = 0x0100
-    WM_KEYUP = 0x0101
+    #WM_KEYUP = 0x0101
 
-    WM_CHAR = 0x0102
+    #WM_CHAR = 0x0102
     C_VK = 0x43
-    C_scan_code = 0x2E  # 00101110
-    C_down = int('000000000000001'+'00101110'+'00000000', 2)
+    # c scan code = 0x2E  # 00101110
+    c_key_down = int('000000000000001'+'00101110'+'00000000', 2)
 
     whnd = win32gui.FindWindowEx(None, None, None, "DIABLO")
     if whnd == 0:
@@ -86,7 +86,7 @@ def interaction():
     # Close the character tab with a mouse click
 
     # Using only the KEYDOWN event is enough, no need for KEYUP
-    win32gui.PostMessage(whnd, WM_KEYDOWN, C_VK, C_down)
+    win32gui.PostMessage(whnd, WM_KEYDOWN, C_VK, c_key_down)
 
     # 3 seconds of sleep
     time.sleep(3)
