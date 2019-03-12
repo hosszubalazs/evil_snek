@@ -3,11 +3,15 @@ import time
 import numpy
 import cv2
 from mss import mss
+import sys
+import win32gui
+import win32con
 
 # Please start Diablo according to the resolution configured here
 # Optimized for full HD screens, you might need to fiddle
 # with the coordinates to properly set the capture.
 DIABLO_WINDOW = {"top": 320, "left": 590, "width": 640, "height": 480}
+
 
 def main():
     # Dummy initialization
@@ -52,5 +56,47 @@ def main():
         # new_frame = blurred_edge
         # final = blurred_edge
 
+
 if __name__ == '__main__':
-    main()
+    # Please check MSDN documentation on these WIN32 codes
+    # Looks scary, but really not so bad
+    WM_LBUTTONDOWN = 0x0201
+    WM_LBUTTONUP = 0x0202
+    MK_LBUTTON = 0x0001
+
+    WM_KEYDOWN = 0x0100
+    WM_KEYUP = 0x0101
+
+    WM_CHAR = 0x0102
+    C_VK = 0x43
+    C_scan_code = 0x2E  # 00101110
+    C_down = int('000000000000001'+'00101110'+'00000000', 2)
+
+    whnd = win32gui.FindWindowEx(None, None, None, "DIABLO")
+    if whnd == 0:
+        sys.exit("Diablo was not found. Please makes sure Diablo is running, and you are running this program with sufficient rights.")
+
+    # Diablo IN YOUR FACE
+    win32gui.SetForegroundWindow(whnd)
+
+    # As a tech demo, lets:
+    # Open the character tab with the 'c' key
+    # Wait a couple of seconds to marvel in the beauty
+    # Close the character tab with a mouse click
+
+    # Using only the KEYDOWN event is enough, no need for KEYUP
+    win32gui.PostMessage(whnd, WM_KEYDOWN, C_VK, C_down)
+
+    # 3 seconds of sleep
+    time.sleep(3)
+
+    # Using Spy++ the needed location of the click can be determined
+    # lparam is 32 bit in lenght, each coordinate is stored on 16 bits
+    # the order of the coordinates is : y,x
+    character_tab_lparam = int('00000001001011110000000000011111', 2)
+
+    win32gui.PostMessage(whnd, WM_LBUTTONDOWN,
+                         MK_LBUTTON, character_tab_lparam)
+    # Let's wait just a little bit, to make sure the events register
+    time.sleep(0.1)
+    win32gui.PostMessage(whnd, WM_LBUTTONUP, MK_LBUTTON, character_tab_lparam)
