@@ -28,7 +28,7 @@ The plan is to focus on a minimum viable solution for a warrior character. (prob
 
 - [MSS](https://pypi.org/project/mss/) -> Grab the screenshot of the game, [docs here help a lot](https://python-mss.readthedocs.io/examples.html#opencv-numpy)
 - [OpenCV 4.0](https://pypi.org/project/opencv-python/) -> Process the image stream
-- ctypes, WIN32 API PostMessage --> Send keyboard and mouse events to window, simulating user input
+- [Python ctypes](https://www.google.com/search?client=firefox-b-d&q=pzthon+ctzpes), WIN32 API PostMessage --> Send keyboard and mouse events to window, simulating user input
 
 ## Automating keyboard and mouse messages
 
