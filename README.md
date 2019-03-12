@@ -30,6 +30,10 @@ The plan is to focus on a minimum viable solution for a warrior character. (prob
 - [OpenCV 4.0](https://pypi.org/project/opencv-python/) -> Process the image stream
 - ctypes, WIN32 API PostMessage --> Send keyboard and mouse events to window, simulating user input
 
+## Automating keyboard and mouse messages
+
+Automating the UI events to Diablo, a DirectX game, was challenging, altough looking back it is pretty simple. Instead of spending hours googling for partially working solutions I suggest the analytical approach. There is a neat tool called Spy++, distributed as a tool of Visual Studio, to watch the window of Diablo and log the messages that it receives. The proper events, both for keyboard and mouse actions, will be nicely logged. MSDN documentation will help to understand what are all those parameters for the messages. The resulting code might not be super nice, but it will work.
+
 ## Grand plan
 
 The solution is based on divide and conquer. The solution will rotate across the module. Each module is a flow / iteration of measure, plan, act. We need to solve the following modules:
