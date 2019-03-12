@@ -6,6 +6,7 @@ from mss import mss
 import sys
 import win32gui
 import win32con
+import threading
 
 # Please start Diablo according to the resolution configured here
 # Optimized for full HD screens, you might need to fiddle
@@ -13,7 +14,7 @@ import win32con
 DIABLO_WINDOW = {"top": 320, "left": 590, "width": 640, "height": 480}
 
 
-def main():
+def opencv():
     # Dummy initialization
     previous_frame = 0
     while 1:
@@ -57,8 +58,8 @@ def main():
         # final = blurred_edge
 
 
-if __name__ == '__main__':
-    # Please check MSDN documentation on these WIN32 codes
+def interaction():
+      # Please check MSDN documentation on these WIN32 codes
     # Looks scary, but really not so bad
     WM_LBUTTONDOWN = 0x0201
     WM_LBUTTONUP = 0x0202
@@ -93,10 +94,25 @@ if __name__ == '__main__':
     # Using Spy++ the needed location of the click can be determined
     # lparam is 32 bit in lenght, each coordinate is stored on 16 bits
     # the order of the coordinates is : y,x
-    character_tab_lparam = int('00000001001011110000000000011111', 2)
+    # If no OpenCV window is open, these are the correct coordinates 
+    # character_tab_lparam = int('00000001001011110000000000011111', 2)
+    #opencv_map_coordinates = int('00000001101011110000000000011111', 2)
+    #opencv_quests_coordinates = int('00000001100000110000000000011111', 2)
+
+    # If OpenCV is open, we need these modified coordinates
+    opencv_chartab_coordinates = int('00000001011100110000000000011111', 2)
 
     win32gui.PostMessage(whnd, WM_LBUTTONDOWN,
-                         MK_LBUTTON, character_tab_lparam)
+                         MK_LBUTTON, opencv_chartab_coordinates)
     # Let's wait just a little bit, to make sure the events register
     time.sleep(0.1)
-    win32gui.PostMessage(whnd, WM_LBUTTONUP, MK_LBUTTON, character_tab_lparam)
+    win32gui.PostMessage(whnd, WM_LBUTTONUP, 0, opencv_chartab_coordinates)
+
+
+if __name__ == '__main__':
+    interaction_thread = threading.Thread(target=interaction)
+    # classifying as a daemon, so they will die when the main dies
+    #interaction_thread.daemon = True
+    # begins, must come after daemon definition
+    interaction_thread.start()
+    opencv()
