@@ -12,8 +12,6 @@ mss==4.0.2
 numpy==1.16.2
 opencv-python==4.0.0.21
 Pillow==5.4.1
-PyAutoGUI==0.9.42
-PyAutoIt==0.5
 pycodestyle==2.5.0
 PyGetWindow==0.0.4
 PyMsgBox==1.0.6
