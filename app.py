@@ -8,10 +8,13 @@ import win32gui
 import win32con
 import threading
 
+import pytesseract
+
+
 # Please start Diablo according to the resolution configured here
 # Optimized for full HD screens, you might need to fiddle
 # with the coordinates to properly set the capture.
-DIABLO_WINDOW = {"top": 320, "left": 590, "width": 640, "height": 480}
+DIABLO_WINDOW = {"top": 290, "left": 640, "width": 640, "height": 480}
 
 
 def opencv():
@@ -27,9 +30,10 @@ def opencv():
         cv2.imshow('Hue->Canny', cv2.Canny(scrnsht_hsv[:, :, 0], 100, 200))
 
         frame_difference = new_frame - previous_frame
-
-        fps = format(1 / (time.time() - last_time), '.2f')
-        print("fps:", fps)
+        time_diff = (time.time() - last_time)
+        if time_diff > 0:
+            fps = format(1 / time_diff, '.2f')
+            #print("fps:", fps)
         cv2.putText(frame_difference, fps,
                     (10, 50),
                     cv2.FONT_HERSHEY_SIMPLEX,
@@ -59,7 +63,7 @@ def opencv():
 
 
 def interaction():
-      # Please check MSDN documentation on these WIN32 codes
+    # Please check MSDN documentation on these WIN32 codes
     # Looks scary, but really not so bad
     WM_LBUTTONDOWN = 0x0201
     WM_LBUTTONUP = 0x0202
@@ -94,7 +98,7 @@ def interaction():
     # Using Spy++ the needed location of the click can be determined
     # lparam is 32 bit in lenght, each coordinate is stored on 16 bits
     # the order of the coordinates is : y,x
-    # If no OpenCV window is open, these are the correct coordinates 
+    # If no OpenCV window is open, these are the correct coordinates
     # character_tab_lparam = int('00000001001011110000000000011111', 2)
     #opencv_map_coordinates = int('00000001101011110000000000011111', 2)
     #opencv_quests_coordinates = int('00000001100000110000000000011111', 2)
@@ -106,13 +110,46 @@ def interaction():
                          MK_LBUTTON, opencv_chartab_coordinates)
     # Let's wait just a little bit, to make sure the events register
     time.sleep(0.1)
-    win32gui.PostMessage(whnd, WM_LBUTTONUP, 0, opencv_chartab_coordinates)
+    win32gui.(whnd, WM_LBUTTONUP, 0, opencv_chartab_coordinates)
+
+def press_c():
+
+
+def report_current_xp():
+    while 1:
+        # 1. openCv -> Cut part of the image
+
+        with mss() as sct:
+            character_tab_screenshot = numpy.array(sct.grab(DIABLO_WINDOW))
+
+        cv2.imwrite(
+            r'C:\Users\hosszub\projects\evil_snek\temp_data\character_screen_captured.png', character_tab_screenshot)
+        #img = cv2.imread(
+        #    r'C:\Users\hosszub\projects\evil_snek\temp_data\character_screen.png')
+        img_of_xp = character_tab_screenshot[55:70, 230:275]
+        cv2.imwrite(
+            r'C:\Users\hosszub\projects\evil_snek\temp_data\xp_captured.png', img_of_xp)
+        # 2. Optional --> apply filters on image to easy OCR processes later on
+        # 3. pytesseract --> read the number
+        xp = pytesseract.image_to_string(
+            img_of_xp, lang="digits_comma", config="--psm 8")
+        # 4. report the number, maybe just log it, maybs show a more complex insight
+        print(time.time(), ": xp=", xp)
+        with open('temp_data/xp_log.csv', 'a') as xp_csv:
+            xp_csv.write('{},{}\n'.format(time.time(), xp))
+        # Let's do periodic check on how the value is changing.
+        time.sleep(3)
 
 
 if __name__ == '__main__':
     interaction_thread = threading.Thread(target=interaction)
     # classifying as a daemon, so they will die when the main dies
-    #interaction_thread.daemon = True
+    interaction_thread.daemon = True
     # begins, must come after daemon definition
-    interaction_thread.start()
+    # interaction_thread.start()
+
+    xp_thread = threading.Thread(target=report_current_xp)
+    xp_thread.daemon = True
+    xp_thread.start()
+
     opencv()
