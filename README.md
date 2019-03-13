@@ -12,6 +12,7 @@ This idea is heavily based on : [Python plays Grand Theft Auto V](https://www.yo
 The project only works on Microsoft Windows operating system. As Diablo is only released for Windows, this should not be an issue.
 
 1. Obtain [Diablo](https://www.gog.com/game/diablo) from GoG
+1.1 Use a 32 bit Python 3.x
 2. Checkout the repository, activate the virtual environment, install dependencies
 3. Install Tesseract 4.0 64 bit binary from [UB-Mannheim Tesseract](https://github.com/UB-Mannheim/tesseract/wiki). Add `tesseract.exe` to your path. Better yet, follow the pytesseract install guide
 4. Start Diablo in windowed mode in 640x480. Diablo should appear in the center of the screen.

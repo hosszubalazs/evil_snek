@@ -4,9 +4,11 @@ import numpy
 import cv2
 from mss import mss
 import sys
-import win32gui
+from win32 import win32gui
 import win32con
 import threading
+
+import ctypes
 
 import pytesseract
 
@@ -14,7 +16,9 @@ import pytesseract
 # Please start Diablo according to the resolution configured here
 # Optimized for full HD screens, you might need to fiddle
 # with the coordinates to properly set the capture.
-DIABLO_WINDOW = {"top": 290, "left": 640, "width": 640, "height": 480}
+DIABLO_WINDOW_FULLHD = {"top": 290, "left": 640, "width": 640, "height": 480}
+DIABLO_WINDOW_4K = {"top": 858, "left": 1600, "width": 640, "height": 480}
+DIABLO_WINDOW = DIABLO_WINDOW_4K
 
 
 def opencv():
@@ -110,25 +114,54 @@ def interaction():
                          MK_LBUTTON, opencv_chartab_coordinates)
     # Let's wait just a little bit, to make sure the events register
     time.sleep(0.1)
-    win32gui.(whnd, WM_LBUTTONUP, 0, opencv_chartab_coordinates)
+    win32gui.PostMessage(whnd, WM_LBUTTONUP, 0, opencv_chartab_coordinates)
+
 
 def press_c():
+        # Please check MSDN documentation on these WIN32 codes
+    # Looks scary, but really not so bad
+    WM_LBUTTONDOWN = 0x0201
+    WM_LBUTTONUP = 0x0202
+    MK_LBUTTON = 0x0001
+
+    WM_KEYDOWN = 0x0100
+    #WM_KEYUP = 0x0101
+
+    #WM_CHAR = 0x0102
+    C_VK = 0x43
+    # c scan code = 0x2E  # 00101110
+    c_key_down = int('000000000000001'+'00101110'+'00000000', 2)
+
+    whnd = win32gui.FindWindowEx(None, None, None, "DIABLO")
+    if whnd == 0:
+        sys.exit("Diablo was not found. Please makes sure Diablo is running, and you are running this program with sufficient rights.")
+
+    # Diablo IN YOUR FACE
+    win32gui.SetForegroundWindow(whnd)
+
+    # Using only the KEYDOWN event is enough, no need for KEYUP
+    win32gui.PostMessage(whnd, WM_KEYDOWN, C_VK, c_key_down)
 
 
 def report_current_xp():
+    time.sleep(3)
+    print("COWABUNGA")
     while 1:
         # 1. openCv -> Cut part of the image
-
+        press_c()
+        time.sleep(0.1)
         with mss() as sct:
             character_tab_screenshot = numpy.array(sct.grab(DIABLO_WINDOW))
+        time.sleep(0.1)
+        press_c()
 
         cv2.imwrite(
-            r'C:\Users\hosszub\projects\evil_snek\temp_data\character_screen_captured.png', character_tab_screenshot)
-        #img = cv2.imread(
+            r'temp_data\character_screen_captured.png', character_tab_screenshot)
+        # img = cv2.imread(
         #    r'C:\Users\hosszub\projects\evil_snek\temp_data\character_screen.png')
         img_of_xp = character_tab_screenshot[55:70, 230:275]
         cv2.imwrite(
-            r'C:\Users\hosszub\projects\evil_snek\temp_data\xp_captured.png', img_of_xp)
+            r'temp_data\xp_captured.png', img_of_xp)
         # 2. Optional --> apply filters on image to easy OCR processes later on
         # 3. pytesseract --> read the number
         xp = pytesseract.image_to_string(
@@ -142,6 +175,8 @@ def report_current_xp():
 
 
 if __name__ == '__main__':
+    if ctypes.sizeof(ctypes.c_voidp) == 8:
+        sys.exit("64 bit Python detected, stopping. Please use a 32bit Python distribution, this is a requirement for win32 api.")
     interaction_thread = threading.Thread(target=interaction)
     # classifying as a daemon, so they will die when the main dies
     interaction_thread.daemon = True

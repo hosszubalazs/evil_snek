@@ -1,5 +1,4 @@
 astroid==2.2.5
-autoit==0.1
 autopep8==1.4.3
 colorama==0.4.1
 Django==2.1.7
