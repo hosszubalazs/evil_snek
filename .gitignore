@@ -2,3 +2,8 @@ venv
 temp_data
 .sonarlint
 .vscode
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
