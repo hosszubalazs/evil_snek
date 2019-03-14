@@ -1,2 +1,4 @@
 venv
 temp_data
+.sonarlint
+.vscode
