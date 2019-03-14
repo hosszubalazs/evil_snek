@@ -7,6 +7,7 @@ import sys
 from win32 import win32gui
 import win32con
 import threading
+import os
 
 import ctypes
 
@@ -145,6 +146,14 @@ def press_c():
 
 def report_current_xp():
     time.sleep(3)
+    path = "temp_data"
+
+    try:
+        os.mkdir(path)
+    except OSError:
+        print("Creation of the directory %s failed" % path)
+    else:
+        print("Successfully created the directory %s " % path)
     print("COWABUNGA")
     while 1:
         # 1. openCv -> Cut part of the image
