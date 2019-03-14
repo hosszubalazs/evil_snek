@@ -13,7 +13,6 @@ opencv-python==4.0.0.21
 Pillow==5.4.1
 pycodestyle==2.5.0
 PyGetWindow==0.0.4
-pylint==2.3.1
 PyMsgBox==1.0.6
 pynput==1.4
 PyRect==0.1.4
