@@ -7,18 +7,6 @@ This repository is an attempt at creating a bot that plays Diablo 1. The game is
 
 This idea is heavily based on : [Python plays Grand Theft Auto V](https://www.youtube.com/watch?v=ks4MPfMq8aQ)
 
-## User Guide
-
-The project only works on Microsoft Windows operating system. As Diablo is only released for Windows, this should not be an issue.
-
-1. Obtain [Diablo](https://www.gog.com/game/diablo) from GoG
-1.1 Use a 32 bit Python 3.x
-2. Checkout the repository, activate the virtual environment, install dependencies
-3. Install Tesseract 4.0 64 bit binary from [UB-Mannheim Tesseract](https://github.com/UB-Mannheim/tesseract/wiki). Add `tesseract.exe` to your path. You can also check the [PyTesseract](https://pypi.org/project/pytesseract/) installation guide.
-4. Start Diablo in windowed mode in 640x480. Diablo should appear in the center of the screen.
-5. Start the app: `python app.py`
-6. Marvel in the beauty and uselessness of the currently available OpenCV filters
-
 ## Current state
 
 A proof-of-concept feedback loop is in place. User interactions (mouse clicks and keyboard presses) can be sent to the game. using this technique the character tabs is opened and screenshotted. After cropping for the intersting part of the image, the number of current experience is determined by OCR. This number is logged into a temporary CSV file. The character is not controlled in any way yet, using clicks that should be possible.
@@ -26,6 +14,21 @@ The plan is to focus on a minimum viable solution for a warrior character. (prob
 
 - for a single character to be dynmically ready for multiple strategies
 - to make the framework moddable, making it easy to develop AI for separate classes and strategies
+
+## Development guide
+
+Please review `azure-pipelines.yml` for an up-to-date requirement of the environment, and steps to setup and test a fresh checkout.
+
+## User Guide
+
+The project only works on Microsoft Windows operating system. As Diablo is only released for Windows, this should not be an issue.
+
+1. Obtain [Diablo](https://www.gog.com/game/diablo) from GoG
+2. Checkout the repository, activate the virtual environment, install dependencies
+3. Install Tesseract 4.0 64 bit binary from [UB-Mannheim Tesseract](https://github.com/UB-Mannheim/tesseract/wiki). Add `tesseract.exe` to your path. You can also check the [PyTesseract](https://pypi.org/project/pytesseract/) installation guide.
+4. Start Diablo in windowed mode in 640x480. Diablo should appear in the center of the screen.
+5. Start the app: `python app.py`
+6. Marvel in the beauty and uselessness of the currently available OpenCV filters
 
 ## Tooling
 

@@ -1,5 +1,9 @@
+#Python stuff
 venv
 temp_data
+junit
+
+#IDE stuff
 .sonarlint
 .vscode
 
