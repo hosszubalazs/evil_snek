@@ -10,7 +10,7 @@ jobs:
 
 - job: 'Test'
   pool:
-    vmImage: 'vs2017-win2016'
+    vmImage: 'vs2017-win2016' # FIXME this is probably based on an outdated documentation, win19 might work as well
   strategy:
     matrix:
       Python36:
@@ -38,12 +38,6 @@ jobs:
       testResultsFiles: '**/test-results.xml'
       testRunTitle: 'Python $(python.version)'
     condition: succeededOrFailed()
-
-  - script: docker build --tag=tesseract_testing .
-    displayName: 'Build Docker image for testing'  
-
-  - script: docker run tesseract_testing
-    displayName: 'Testing in Docker'
 
 # Distribution is not yet solved.
 #- job: 'Publish'
