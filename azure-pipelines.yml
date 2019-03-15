@@ -39,6 +39,12 @@ jobs:
       testRunTitle: 'Python $(python.version)'
     condition: succeededOrFailed()
 
+  - script: docker build --tag=tesseract_testing .
+    displayName: 'Build Docker image for testing'  
+
+  - script: docker run tesseract_testing
+    displayName: 'Testing in Docker'
+
 # Distribution is not yet solved.
 #- job: 'Publish'
 #  dependsOn: 'Test'
