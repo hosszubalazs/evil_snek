@@ -3,6 +3,7 @@ venv
 temp_data
 junit
 dist
+build
 
 #IDE stuff
 .sonarlint
