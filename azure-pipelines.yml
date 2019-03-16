@@ -48,6 +48,24 @@ jobs:
       testResultsFiles: '**/test-results.xml'
       testRunTitle: 'Docker based testing'
     condition: succeededOrFailed()
+
+  - task: Docker@1
+    displayName: Tag image
+    inputs:
+      command: tag
+      containerregistrytype: 'Container Registry'    
+      dockerRegistryEndpoint: 'hosszubalazs_dockerhub'
+      imageName: hosszubalazs/evil_snek
+      arguments: hosszubalazs/evil_snek:$(Build.BuildId)
+
+  - task: Docker@1
+    displayName: Push image
+    inputs:
+      command: push
+      containerregistrytype: 'Container Registry'    
+      dockerRegistryEndpoint: 'hosszubalazs_dockerhub'
+      imageName: hosszubalazs/evil_snek:$(Build.BuildId)
+  
  # - task: Docker@1
  #   displayName: login
  #   inputs:
