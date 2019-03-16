@@ -35,6 +35,9 @@ def save_image(folder_path, filename, image):
 def crop_xp(character_tab_screenshot):
     return character_tab_screenshot[55:70, 230:275]
 
+def crop_gold(character_tab_screenshot):
+    return character_tab_screenshot[133:148, 230:275]
+
 def opencv_fun():
     # Dummy initialization
     previous_frame = 0
