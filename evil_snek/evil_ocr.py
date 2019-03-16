@@ -4,7 +4,7 @@ import logging
 
 def read_single_int(image):
     recognized_text = pytesseract.image_to_string(
-        image, lang="digits_comma", config="--psm 8")
+        image, lang="digits_comma", config=" --psm 8")
     # trim the single quotes from the two sides
     trimmed = recognized_text.strip('\'')
     # Default for 0

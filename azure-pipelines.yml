@@ -28,16 +28,8 @@ jobs:
   - script: python -m pip install --upgrade pip && pip install -r requirements/requirements.txt
     displayName: 'Install dependencies'
 
-  - script: |
-      pip install pytest
-      pytest tests --doctest-modules --junitxml=junit/test-results.xml
-    displayName: 'pytest'
 
-  - task: PublishTestResults@2
-    inputs:
-      testResultsFiles: '**/test-results.xml'
-      testRunTitle: 'Python $(python.version)'
-    condition: succeededOrFailed()
+
 
 - job: 'Test'
   # Sharing Pipeline artifacts might be needed later on: https://docs.microsoft.com/en-us/azure/devops/pipelines/artifacts/pipeline-artifacts?view=azure-devops&tabs=yaml
@@ -47,8 +39,15 @@ jobs:
 
   steps:
   # prefer simple scripts instead of specific tasks if it does work
+  - script: mkdir junit
   - script: docker build -t hosszubalazs/evil_snek .
-  - script: docker run hosszubalazs/evil_snek
+  - script: docker run -v $(Build.SourcesDirectory)/junit:/home/work/junit hosszubalazs/evil_snek
+
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFiles: '**/test-results.xml'
+      testRunTitle: 'Docker based testing'
+    condition: succeededOrFailed()
  # - task: Docker@1
  #   displayName: login
  #   inputs:
