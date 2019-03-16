@@ -1,5 +1,5 @@
 # This is the real requirements file, intended for usage on Windows machines.
 # Linux is used for test automation purposes ( easier to install Tesseract), while pywin32 is not compatible there.
 # Because of this the final setup requires these 2 separated environments.
--r dev_linux_compatible.txt
+-r testing_linux_compatible.txt
 pywin32==224
