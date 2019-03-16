@@ -36,7 +36,7 @@ def save_image(folder_path, filename, image):
 def crop_xp(character_tab_screenshot):
     height, width, channels = character_tab_screenshot.shape
     x_start = int(0.36 * width)
-    x_size = int(50/640 * width)
+    x_size = int(60/640 * width)
 
     y_start = int(0.115 * height)
     y_size = int(15/480 * height)
@@ -47,7 +47,7 @@ def crop_gold(character_tab_screenshot):
     height, width, channels = character_tab_screenshot.shape
 
     x_start = int(240/640 * width)
-    x_size = int(50/640 * width)
+    x_size = int(60/640 * width)
 
     y_start = int(133/480 * height)
     y_size = int(16/480 * height)
