@@ -33,13 +33,23 @@ def report_current_xp():
         devil_vision.save_image(
             temp_data_path, "character_screen_captured.png", character_tab_screenshot)
 
+        #
+        # XP
+        #
         img_of_xp =devil_vision.crop_xp(character_tab_screenshot)
         devil_vision.save_image(temp_data_path, "xp_captured.png", img_of_xp)
-        # 2. Optional --> apply filters on image to easy OCR processes later on
-        # 3. pytesseract --> read the number
-        xp = evil_ocr.read_single_number(img_of_xp)
-        # 4. report the number, maybe just log it, maybs show a more complex insight
-        print(time.time(), ": xp=", xp)
+        xp = evil_ocr.read_single_int(img_of_xp)
+        print(time.time()) 
+        print("xp=", xp)
+
+        #
+        # GOLD
+        #
+        img_of_gold =devil_vision.crop_gold(character_tab_screenshot)
+        devil_vision.save_image(temp_data_path, "gold_captured.png", img_of_gold)
+        gold = evil_ocr.read_single_int(img_of_gold)
+        print("gold=", gold)
+
         with open('temp_data/xp_log.csv', 'a') as xp_csv:
             xp_csv.write('{},{}\n'.format(time.time(), xp))
         # Let's do periodic check on how the value is changing.
