@@ -36,17 +36,18 @@ def report_current_xp():
         #
         # XP
         #
-        img_of_xp =devil_vision.crop_xp(character_tab_screenshot)
+        img_of_xp = devil_vision.crop_xp(character_tab_screenshot)
         devil_vision.save_image(temp_data_path, "xp_captured.png", img_of_xp)
         xp = evil_ocr.read_single_int(img_of_xp)
-        print(time.time()) 
+        print(time.time())
         print("xp=", xp)
 
         #
         # GOLD
         #
-        img_of_gold =devil_vision.crop_gold(character_tab_screenshot)
-        devil_vision.save_image(temp_data_path, "gold_captured.png", img_of_gold)
+        img_of_gold = devil_vision.crop_gold(character_tab_screenshot)
+        devil_vision.save_image(
+            temp_data_path, "gold_captured.png", img_of_gold)
         gold = evil_ocr.read_single_int(img_of_gold)
         print("gold=", gold)
 
