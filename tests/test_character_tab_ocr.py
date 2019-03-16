@@ -44,3 +44,31 @@ def test_crop_ocr_gold_2():
     gold_picture = devil_vision.crop_gold(img)
     gold_value = evil_ocr.read_single_int(gold_picture)
     assert gold_value == 1835
+
+
+def test_crop_ocr_xp_3():
+    img = cv2.imread(TEST_DATA_PATH+'character_screen_3.png')
+    xp_picture = devil_vision.crop_xp(img)
+    xp_value = evil_ocr.read_single_int(xp_picture)
+    assert xp_value == 83752
+
+
+def test_crop_ocr_gold_3():
+    img = cv2.imread(TEST_DATA_PATH+'character_screen_3.png')
+    gold_picture = devil_vision.crop_gold(img)
+    gold_value = evil_ocr.read_single_int(gold_picture)
+    assert gold_value == 1871
+
+
+def test_crop_ocr_xp_4():
+    img = cv2.imread(TEST_DATA_PATH+'character_screen_4.png')
+    xp_picture = devil_vision.crop_xp(img)
+    xp_value = evil_ocr.read_single_int(xp_picture)
+    assert xp_value == 84227
+
+
+def test_crop_ocr_gold_4():
+    img = cv2.imread(TEST_DATA_PATH+'character_screen_4.png')
+    gold_picture = devil_vision.crop_gold(img)
+    gold_value = evil_ocr.read_single_int(gold_picture)
+    assert gold_value == 1871
