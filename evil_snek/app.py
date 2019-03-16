@@ -33,7 +33,7 @@ def report_current_xp():
         devil_vision.save_image(
             temp_data_path, "character_screen_captured.png", character_tab_screenshot)
 
-        img_of_xp = character_tab_screenshot[55:70, 230:275]
+        img_of_xp =devil_vision.crop_xp(character_tab_screenshot)
         devil_vision.save_image(temp_data_path, "xp_captured.png", img_of_xp)
         # 2. Optional --> apply filters on image to easy OCR processes later on
         # 3. pytesseract --> read the number

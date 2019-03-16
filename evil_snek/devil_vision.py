@@ -32,6 +32,8 @@ def save_image(folder_path, filename, image):
     cv2.imwrite(
         r'{}\{}'.format(folder_path, filename), image)
 
+def crop_xp(character_tab_screenshot):
+    return character_tab_screenshot[55:70, 230:275]
 
 def opencv_fun():
     # Dummy initialization
