@@ -35,8 +35,8 @@ def save_image(folder_path, filename, image):
 
 def crop_xp(character_tab_screenshot):
     height, width, channels = character_tab_screenshot.shape
-    x_start = int(0.36 * width)
-    x_size = int(60/640 * width)
+    x_start = int(0.34 * width)
+    x_size = int(70/640 * width)
 
     y_start = int(0.115 * height)
     y_size = int(15/480 * height)
