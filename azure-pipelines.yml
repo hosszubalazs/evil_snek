@@ -1,7 +1,5 @@
-# Python package
-# Create and test a Python package on multiple Python versions.
-# Add steps that analyze code, save the dist with the build record, publish to a PyPI-compatible index, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/python
+# On a windows host install the requirmenets as a minimanl check that they are correct.
+# On a Linux host use a container to tests the application.
 
 trigger:
 - master
@@ -28,11 +26,7 @@ jobs:
   - script: python -m pip install --upgrade pip && pip install -r requirements/requirements.txt
     displayName: 'Install dependencies'
 
-
-
-
 - job: 'Test'
-  # Sharing Pipeline artifacts might be needed later on: https://docs.microsoft.com/en-us/azure/devops/pipelines/artifacts/pipeline-artifacts?view=azure-devops&tabs=yaml
   dependsOn: Build
   pool:
     vmImage: 'ubuntu-16.04'
@@ -65,39 +59,3 @@ jobs:
       containerregistrytype: 'Container Registry'    
       dockerRegistryEndpoint: 'hosszubalazs_dockerhub'
       imageName: hosszubalazs/evil_snek:$(Build.BuildId)
-  
- # - task: Docker@1
- #   displayName: login
- #   inputs:
- #     containerregistrytype: 'Container Registry'
- #     dockerRegistryEndpoint: 'hosszubalazs_dockerhub'
- #     command: login
-
-# - task: Docker@0
-#  displayName: 'Build an image'
-#  inputs:
-#    containerregistrytype: 'Container Registry'
-#    dockerRegistryConnection: 'hosszubalazs_dockerhub'
-
-#  - task: Docker@0
-#  displayName: 'Run an image'
-#  inputs:
-##    containerregistrytype: 'Container Registry'
-#    dockerRegistryConnection: 'hosszubalazs_dockerhub'
- #   action: 'Run an image'
-
-
-# The distribution strategy is not clear
-#- job: 'Publish'
-#  dependsOn: 'Test'
-#  pool:
-#    vmImage: 'vs2017-win2016'
-
-  #steps:
-#  - task: UsePythonVersion@0
-#    inputs:
-#     versionSpec: '3.7'
-#     architecture: 'x86'
-
-#  - script: python setup.py sdist --format=zip
-#    displayName: 'Build sdist'
