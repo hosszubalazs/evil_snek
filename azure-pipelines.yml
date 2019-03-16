@@ -10,7 +10,7 @@ jobs:
 
 - job: 'Build'
   pool:
-    vmImage: 'vs2017-win2016' # FIXME this is probably based on an outdated documentation, win19 might work as well
+    vmImage: 'windows-2019'
   strategy:
     matrix:
       Python36:
