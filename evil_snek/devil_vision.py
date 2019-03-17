@@ -10,7 +10,7 @@ import time
 # with the coordinates to properly set the capture.
 DIABLO_WINDOW_FULLHD = {"top": 290, "left": 640, "width": 640, "height": 480}
 DIABLO_WINDOW_4K = {"top": 858, "left": 1600, "width": 640, "height": 480}
-DIABLO_WINDOW = DIABLO_WINDOW_4K
+DIABLO_WINDOW = DIABLO_WINDOW_FULLHD
 
 
 def create_folder(folder_path):
@@ -31,6 +31,27 @@ def take_screenshot():
 def save_image(folder_path, filename, image):
     cv2.imwrite(
         r'{}\{}'.format(folder_path, filename), image)
+
+
+def crop_xp(character_tab_screenshot):
+    height, width, channels = character_tab_screenshot.shape
+    x_start = int(0.34 * width)
+    x_size = int(70/640 * width)
+
+    y_start = int(0.115 * height)
+    y_size = int(15/480 * height)
+    return character_tab_screenshot[y_start:y_start+y_size, x_start:x_start+x_size]
+
+
+def crop_gold(character_tab_screenshot):
+    height, width, channels = character_tab_screenshot.shape
+
+    x_start = int(240/640 * width)
+    x_size = int(60/640 * width)
+
+    y_start = int(133/480 * height)
+    y_size = int(16/480 * height)
+    return character_tab_screenshot[y_start:y_start+y_size, x_start:x_start+x_size]
 
 
 def opencv_fun():
