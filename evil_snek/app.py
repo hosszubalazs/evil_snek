@@ -15,7 +15,7 @@ import devil_vision
 WHND = 0
 
 
-def report_current_xp():
+def report_current_xp(diablo_window_dimensions):
 
     time.sleep(3)
     temp_data_path = "temp_data"
@@ -25,7 +25,7 @@ def report_current_xp():
         fake_ui.press_button(WHND, fake_ui.C_VK, fake_ui.C_SC)
         time.sleep(0.1)
 
-        character_tab_screenshot = devil_vision.take_screenshot()
+        character_tab_screenshot = devil_vision.take_screenshot(diablo_window_dimensions)
         time.sleep(0.1)
 
         fake_ui.press_button(WHND, fake_ui.C_VK, fake_ui.C_SC)
@@ -61,10 +61,11 @@ if __name__ == '__main__':
     if ctypes.sizeof(ctypes.c_voidp) == 8:
         sys.exit("64 bit Python detected, stopping. Please use a 32bit Python distribution, this is a requirement for win32 api.")
 
-    WHND = fake_ui.initalize_window_handler()
+    WHND, rect = fake_ui.initalize_window_handler()
+    diablo_window_dimensions= devil_vision.initialize_window_size(rect)
 
-    xp_thread = threading.Thread(target=report_current_xp)
+    xp_thread = threading.Thread(target=report_current_xp, args=(diablo_window_dimensions,))
     xp_thread.daemon = True
     xp_thread.start()
 
-    devil_vision.opencv_fun()
+    devil_vision.opencv_fun(diablo_window_dimensions)

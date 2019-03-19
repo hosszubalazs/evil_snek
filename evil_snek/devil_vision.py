@@ -5,12 +5,17 @@ import os
 import time
 
 
-# Please start Diablo according to the resolution configured here
-# Optimized for full HD screens, you might need to fiddle
-# with the coordinates to properly set the capture.
-DIABLO_WINDOW_FULLHD = {"top": 290, "left": 640, "width": 640, "height": 480}
-DIABLO_WINDOW_4K = {"top": 858, "left": 1600, "width": 640, "height": 480}
-DIABLO_WINDOW = DIABLO_WINDOW_FULLHD
+def initialize_window_size(window_parameters):
+    side_margin = 1
+    top_margin = 32
+    bottom_margin = 1
+    window_dimensions = {
+        "top": window_parameters.top + top_margin,
+        "left": window_parameters.left + side_margin,
+        "width": window_parameters.right - window_parameters.left - 2*side_margin,
+        "height": window_parameters.bottom - (window_parameters.top + top_margin) - bottom_margin
+    }
+    return window_dimensions
 
 
 def create_folder(folder_path):
@@ -22,9 +27,9 @@ def create_folder(folder_path):
         print("Successfully created the directory %s " % folder_path)
 
 
-def take_screenshot():
+def take_screenshot(window_dimensions):
     with mss() as sct:
-        screenshot = numpy.array(sct.grab(DIABLO_WINDOW))
+        screenshot = numpy.array(sct.grab(window_dimensions))
     return screenshot
 
 
@@ -40,7 +45,12 @@ def crop_xp(character_tab_screenshot):
 
     y_start = int(0.115 * height)
     y_size = int(15/480 * height)
-    return character_tab_screenshot[y_start:y_start+y_size, x_start:x_start+x_size]
+    cropped = character_tab_screenshot[y_start:y_start +
+                                       y_size, x_start:x_start+x_size]
+
+    imagem = cv2.bitwise_not(cropped)
+
+    return imagem
 
 
 def crop_gold(character_tab_screenshot):
@@ -54,13 +64,36 @@ def crop_gold(character_tab_screenshot):
     return character_tab_screenshot[y_start:y_start+y_size, x_start:x_start+x_size]
 
 
-def opencv_fun():
+def crop_hp(character_tab_screenshot):
+    height, width, channels = character_tab_screenshot.shape
+    x_start = int(142/640 * width)
+    x_size = int(35/640 * width)
+
+    y_start = int(293/480 * height)
+    y_size = int(15/480 * height)
+    cropped = character_tab_screenshot[y_start:y_start +
+                                       y_size, x_start:x_start+x_size]
+
+    grayed = cv2.cvtColor(cropped, cv2.COLOR_BGR2GRAY)
+    normalized = cv2.normalize(grayed, grayed, 0, 255, cv2.NORM_MINMAX)
+
+    ret, thresh1 = cv2.threshold(normalized, 170, 400, cv2.THRESH_BINARY)
+
+    #cannied = cv2.Canny(normalized, 570, 750)
+    gaussian_blurred_2 = cv2.GaussianBlur(thresh1, (3, 3), 0)
+    return gaussian_blurred_2
+
+
+def opencv_fun(window_dimensions):
+    print("lol")
+    print(window_dimensions)
+
     # Dummy initialization
     previous_frame = 0
     while 1:
         last_time = time.time()
-        with mss() as sct:
-            diablo_scrnsht = numpy.array(sct.grab(DIABLO_WINDOW))
+
+        diablo_scrnsht = take_screenshot(window_dimensions)
 
         scrnsht_hsv = cv2.cvtColor(diablo_scrnsht, cv2.COLOR_BGR2HSV)
         new_frame = scrnsht_hsv

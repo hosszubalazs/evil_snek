@@ -2,6 +2,9 @@ from win32 import win32gui
 import win32con
 import sys
 import time
+import ctypes
+
+from ctypes import wintypes
 
 
 # Please check MSDN documentation on these WIN32 codes
@@ -30,7 +33,25 @@ def initalize_window_handler(window_title='DIABLO'):
     WHND = win32gui.FindWindowEx(None, None, None, window_title)
     if WHND == 0:
         sys.exit("Diablo was not found. Please makes sure Diablo is running, and you are running this program with sufficient rights.")
-    return WHND
+
+    try:
+        f = ctypes.windll.dwmapi.DwmGetWindowAttribute
+    except WindowsError:
+        f = None
+    if f:  # Vista & 7 stuff
+        rect = ctypes.wintypes.RECT()
+        DWMWA_EXTENDED_FRAME_BOUNDS = 9
+        f(WHND,
+          ctypes.wintypes.DWORD(DWMWA_EXTENDED_FRAME_BOUNDS),
+          ctypes.byref(rect),
+          ctypes.sizeof(rect)
+          )
+    else:
+        print(" Getting the size of the window was unsuccessful :( :(")
+
+    print("source")
+    print(rect)
+    return WHND, rect
 
 
 def press_button(whnd, virtual_key, scan_code):
