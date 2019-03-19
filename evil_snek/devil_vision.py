@@ -49,7 +49,7 @@ def crop_xp(character_tab_screenshot):
     cropped = character_tab_screenshot[y_start:y_start +
                                        y_size, x_start:x_start+x_size]
 
-    #imagem = cv2.bitwise_not(cropped)
+    # imagem = cv2.bitwise_not(cropped)
 
     return cropped
 
@@ -75,17 +75,17 @@ def crop_hp(character_tab_screenshot):
     cropped = character_tab_screenshot[y_start:y_start +
                                        y_size, x_start:x_start+x_size]
 
-    #grayed = cv2.cvtColor(cropped, cv2.COLOR_BGR2GRAY)
-    #normalized = cv2.normalize(grayed, grayed, 0, 255, cv2.NORM_MINMAX)
+    # grayed = cv2.cvtColor(cropped, cv2.COLOR_BGR2GRAY)
+    # normalized = cv2.normalize(grayed, grayed, 0, 255, cv2.NORM_MINMAX)
 
-    #ret, thresh1 = cv2.threshold(normalized, 170, 400, cv2.THRESH_BINARY)
+    # ret, thresh1 = cv2.threshold(normalized, 170, 400, cv2.THRESH_BINARY)
 
-    #cannied = cv2.Canny(normalized, 570, 750)
-    #gaussian_blurred_2 = cv2.GaussianBlur(thresh1, (3, 3), 0)
+    # cannied = cv2.Canny(normalized, 570, 750)
+    # gaussian_blurred_2 = cv2.GaussianBlur(thresh1, (3, 3), 0)
     return cropped
 
 
-def opencv_fun(window_dimensions):
+def opencv_fun(window_dimensions, temp_data_path):
     print("lol")
     print(window_dimensions)
 
@@ -97,23 +97,25 @@ def opencv_fun(window_dimensions):
         diablo_scrnsht = take_screenshot(window_dimensions)
 
         scrnsht_hsv = cv2.cvtColor(diablo_scrnsht, cv2.COLOR_BGR2HSV)
-        new_frame = scrnsht_hsv
-        cv2.imshow('Hue->Canny', cv2.Canny(scrnsht_hsv[:, :, 0], 100, 200))
+        canny_on_hue = cv2.Canny(scrnsht_hsv[:, :, 0], 100, 200)
+        save_image(temp_data_path, "canny_on_hue.png", canny_on_hue)
+        cv2.imshow('Canny on Hue channel', canny_on_hue)
 
-        frame_difference = new_frame - previous_frame
+        frame_difference = canny_on_hue - previous_frame
         time_diff = (time.time() - last_time)
         if time_diff > 0:
             fps = format(1 / time_diff, '.2f')
-            #print("fps:", fps)
-        cv2.putText(frame_difference, fps,
+            # print("fps:", fps)
+        cv2.putText(frame_difference, "FPS={}".format(fps),
                     (10, 50),
                     cv2.FONT_HERSHEY_SIMPLEX,
                     1,
                     (255, 255, 255),
                     2)
 
+        save_image(temp_data_path, "frame_difference.png", frame_difference)
         cv2.imshow('Difference between HSV frames', frame_difference)
-        previous_frame = new_frame
+        previous_frame = canny_on_hue
 
         if cv2.waitKey(25) & 0xFF == ord('q'):
             cv2.destroyAllWindows()
