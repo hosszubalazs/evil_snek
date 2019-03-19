@@ -51,6 +51,15 @@ def report_current_xp(diablo_window_dimensions):
         gold = evil_ocr.read_single_int(img_of_gold)
         print("gold=", gold)
 
+        #
+        # HP
+        #
+        img_of_hp = devil_vision.crop_hp(character_tab_screenshot)
+        devil_vision.save_image(
+            temp_data_path, "hp_captured.png", img_of_hp)
+        hp = evil_ocr.read_single_int(img_of_hp)
+        print("hp=", hp)
+
         with open('temp_data/xp_log.csv', 'a') as xp_csv:
             xp_csv.write('{},{}\n'.format(time.time(), xp))
         # Let's do periodic check on how the value is changing.
