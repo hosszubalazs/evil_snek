@@ -6,6 +6,7 @@ import time
 
 
 def initialize_window_size(window_parameters):
+    # FIXME the margins only work in 4:3 windowed mode
     side_margin = 1
     top_margin = 32
     bottom_margin = 1
