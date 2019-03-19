@@ -48,9 +48,9 @@ def crop_xp(character_tab_screenshot):
     cropped = character_tab_screenshot[y_start:y_start +
                                        y_size, x_start:x_start+x_size]
 
-    imagem = cv2.bitwise_not(cropped)
+    #imagem = cv2.bitwise_not(cropped)
 
-    return imagem
+    return cropped
 
 
 def crop_gold(character_tab_screenshot):
@@ -74,14 +74,14 @@ def crop_hp(character_tab_screenshot):
     cropped = character_tab_screenshot[y_start:y_start +
                                        y_size, x_start:x_start+x_size]
 
-    grayed = cv2.cvtColor(cropped, cv2.COLOR_BGR2GRAY)
-    normalized = cv2.normalize(grayed, grayed, 0, 255, cv2.NORM_MINMAX)
+    #grayed = cv2.cvtColor(cropped, cv2.COLOR_BGR2GRAY)
+    #normalized = cv2.normalize(grayed, grayed, 0, 255, cv2.NORM_MINMAX)
 
-    ret, thresh1 = cv2.threshold(normalized, 170, 400, cv2.THRESH_BINARY)
+    #ret, thresh1 = cv2.threshold(normalized, 170, 400, cv2.THRESH_BINARY)
 
     #cannied = cv2.Canny(normalized, 570, 750)
-    gaussian_blurred_2 = cv2.GaussianBlur(thresh1, (3, 3), 0)
-    return gaussian_blurred_2
+    #gaussian_blurred_2 = cv2.GaussianBlur(thresh1, (3, 3), 0)
+    return cropped
 
 
 def opencv_fun(window_dimensions):
