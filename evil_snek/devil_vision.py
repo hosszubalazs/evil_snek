@@ -3,6 +3,10 @@ from mss import mss
 import numpy
 import os
 import time
+import numpy
+
+from imutils import contours
+import imutils
 
 
 def initialize_window_size(window_parameters):
@@ -39,30 +43,70 @@ def save_image(folder_path, filename, image):
         r'{}\{}'.format(folder_path, filename), image)
 
 
+def invert_image(image):
+    return ~image
+
+
+def threshold_chracter_text(image):
+    #ret, thresh1 = cv2.threshold(image, 170, 400, cv2.THRESH_BINARY)
+
+    # Removing background noise, defaulting it to black
+    # Everything below minvalue goes to black, maxvalue is ignored
+    ret, thresh1 = cv2.threshold(image, 150, 400, cv2.THRESH_TOZERO)
+    # binarise the remaining
+    ret, thresh2 = cv2.threshold(thresh1, 100, 255, cv2.THRESH_BINARY)
+
+    return thresh2
+
+
+def blur_test(image, kernel=3):
+    return cv2.GaussianBlur(image, (kernel, kernel), 0)
+
+
+def bw_and_normalize(image):
+    grayed = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    normalized = cv2.normalize(grayed, grayed, 0, 255, cv2.NORM_MINMAX)
+    return normalized
+
+
 def crop_xp(character_tab_screenshot):
     height, width, channels = character_tab_screenshot.shape
-    x_start = int(0.34 * width)
-    x_size = int(70/640 * width)
+    # tag
+    x_start = int(470/1400 * width)
+    x_size = int(190/1400 * width)
 
-    y_start = int(0.115 * height)
-    y_size = int(15/480 * height)
+    # szuk --> Sokkal rosszabb
+    #x_start = int(510/1400 * width)
+    #x_size = int(110/1400 * width)
+
+    y_start = int(125/1050 * height)
+    y_size = int(30/1050 * height)
     cropped = character_tab_screenshot[y_start:y_start +
                                        y_size, x_start:x_start+x_size]
 
-    # imagem = cv2.bitwise_not(cropped)
+    #gaussian_blurred_2 = cv2.GaussianBlur(thresh1, (3, 3), 0)
+    thresholded = threshold_chracter_text(cropped)
+    grayed = cv2.cvtColor(thresholded, cv2.COLOR_BGR2GRAY)
 
-    return cropped
+    #blurred = blur_test(thresholded)
+    #inverted = invert_image(blurred)
+    return grayed
 
 
 def crop_gold(character_tab_screenshot):
     height, width, channels = character_tab_screenshot.shape
 
-    x_start = int(240/640 * width)
-    x_size = int(60/640 * width)
+    x_start = int(470/1400 * width)
+    x_size = int(190/1400 * width)
 
-    y_start = int(133/480 * height)
-    y_size = int(16/480 * height)
-    return character_tab_screenshot[y_start:y_start+y_size, x_start:x_start+x_size]
+    y_start = int(295/1050 * height)
+    y_size = int(30/1050 * height)
+    cropped = character_tab_screenshot[y_start:y_start +
+                                       y_size, x_start:x_start+x_size]
+    thresholded = threshold_chracter_text(cropped)
+    grayed = cv2.cvtColor(thresholded, cv2.COLOR_BGR2GRAY)
+
+    return grayed
 
 
 def crop_hp(character_tab_screenshot):
@@ -71,23 +115,65 @@ def crop_hp(character_tab_screenshot):
     x_size = int(35/640 * width)
 
     y_start = int(293/480 * height)
-    y_size = int(15/480 * height)
+    y_size = int(30/1050 * height)
     cropped = character_tab_screenshot[y_start:y_start +
                                        y_size, x_start:x_start+x_size]
 
     # grayed = cv2.cvtColor(cropped, cv2.COLOR_BGR2GRAY)
     # normalized = cv2.normalize(grayed, grayed, 0, 255, cv2.NORM_MINMAX)
-
+    # since the hp can have color
+    normalized = bw_and_normalize(cropped)
+    thresholded = threshold_chracter_text(normalized)
     # ret, thresh1 = cv2.threshold(normalized, 170, 400, cv2.THRESH_BINARY)
 
     # cannied = cv2.Canny(normalized, 570, 750)
     # gaussian_blurred_2 = cv2.GaussianBlur(thresh1, (3, 3), 0)
-    return cropped
+    # blur_test(threshold_chracter_text(bw_and_normalize(cropped)))
+    #grayed = cv2.cvtColor(thresholded, cv2.COLOR_BGR2GRAY)
+
+    return thresholded
+
+
+def analyze_number_from_image(toread):
+    magiced_number = 0
+
+    tenyleg_ref = cv2.imread("tests/test_data/exocet_heavy_digits_reference.PNG")
+    tenyleg_ref = cv2.cvtColor(tenyleg_ref, cv2.COLOR_BGR2GRAY)
+
+    #toread = cv2.imread("temp_data/xp_captured.png")
+    #toread = cv2.cvtColor(toread, cv2.COLOR_BGR2GRAY)
+
+    # find contours in the OCR-A image (i.e,. the outlines of the digits)
+    # sort them from left to right, and initialize a dictionary to map
+    # digit name to the ROI
+    toreadCnts = cv2.findContours(
+        toread, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    toreadCnts = imutils.grab_contours(toreadCnts)
+    toreadCnts = contours.sort_contours(toreadCnts, method="left-to-right")[0]
+
+    alma = {1: "1", 2: "1", 3: "1", 14: "2", 15: "2", 30: "3", 31: "3", 45: "4", 62: "5", 63: "5", 78: "6",
+            79: "6", 93: "7", 94: "7", 95:"7", 110: "8", 111: "8", 112: "8", 128: "9", 143: "0", 144:"0"}
+
+    convert_this_str_to_int = ""
+    # loop over the OCR-A reference contours
+    for (i, c) in enumerate(toreadCnts):
+
+        # compute the bounding box for the digit, extract it, and resize
+        # it to a fixed size
+        (x, y, w, h) = cv2.boundingRect(c)
+        roi = toread[y:y + h, x:x + w]
+        #roi = cv2.resize(roi, (57, 88))
+        roi = invert_image(roi)
+        moech = cv2.matchTemplate(tenyleg_ref, roi, cv2.TM_CCORR_NORMED)
+
+        min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(moech)
+        print("max_loc:{}", max_loc)
+        convert_this_str_to_int += "{}".format(alma[max_loc[0]])
+
+    return int(convert_this_str_to_int)
 
 
 def opencv_fun(window_dimensions, temp_data_path):
-    print("lol")
-    print(window_dimensions)
 
     # Dummy initialization
     previous_frame = 0
