@@ -48,8 +48,6 @@ def invert_image(image):
 
 
 def threshold_chracter_text(image):
-    #ret, thresh1 = cv2.threshold(image, 170, 400, cv2.THRESH_BINARY)
-
     # Removing background noise, defaulting it to black
     # Everything below minvalue goes to black, maxvalue is ignored
     ret, thresh1 = cv2.threshold(image, 150, 400, cv2.THRESH_TOZERO)
@@ -71,49 +69,35 @@ def bw_and_normalize(image):
 
 def crop_xp(character_tab_screenshot):
     height, width, channels = character_tab_screenshot.shape
-    # tag
+
     x_start = int(470/1400 * width)
     x_size = int(190/1400 * width)
-
-    # szuk --> Sokkal rosszabb
-    #x_start = int(510/1400 * width)
-    #x_size = int(110/1400 * width)
 
     y_start = int(125/1050 * height)
     y_size = int(30/1050 * height)
     cropped = character_tab_screenshot[y_start:y_start +
                                        y_size, x_start:x_start+x_size]
 
-    #gaussian_blurred_2 = cv2.GaussianBlur(thresh1, (3, 3), 0)
     thresholded = threshold_chracter_text(cropped)
     grayed = cv2.cvtColor(thresholded, cv2.COLOR_BGR2GRAY)
 
-    #blurred = blur_test(thresholded)
-    #inverted = invert_image(blurred)
     return grayed
 
 
 def crop_nextlvl_xp(character_tab_screenshot):
     height, width, channels = character_tab_screenshot.shape
-    # tag
+
     x_start = int(470/1400 * width)
     x_size = int(190/1400 * width)
-
-    # szuk --> Sokkal rosszabb
-    #x_start = int(510/1400 * width)
-    #x_size = int(110/1400 * width)
 
     y_start = int(185/1050 * height)
     y_size = int(30/1050 * height)
     cropped = character_tab_screenshot[y_start:y_start +
                                        y_size, x_start:x_start+x_size]
 
-    #gaussian_blurred_2 = cv2.GaussianBlur(thresh1, (3, 3), 0)
     thresholded = threshold_chracter_text(cropped)
     grayed = cv2.cvtColor(thresholded, cv2.COLOR_BGR2GRAY)
 
-    #blurred = blur_test(thresholded)
-    #inverted = invert_image(blurred)
     return grayed
 
 
@@ -143,17 +127,9 @@ def crop_hp(character_tab_screenshot):
     cropped = character_tab_screenshot[y_start:y_start +
                                        y_size, x_start:x_start+x_size]
 
-    # grayed = cv2.cvtColor(cropped, cv2.COLOR_BGR2GRAY)
-    # normalized = cv2.normalize(grayed, grayed, 0, 255, cv2.NORM_MINMAX)
     # since the hp can have color
     normalized = bw_and_normalize(cropped)
     thresholded = threshold_chracter_text(normalized)
-    # ret, thresh1 = cv2.threshold(normalized, 170, 400, cv2.THRESH_BINARY)
-
-    # cannied = cv2.Canny(normalized, 570, 750)
-    # gaussian_blurred_2 = cv2.GaussianBlur(thresh1, (3, 3), 0)
-    # blur_test(threshold_chracter_text(bw_and_normalize(cropped)))
-    #grayed = cv2.cvtColor(thresholded, cv2.COLOR_BGR2GRAY)
 
     return thresholded
 
@@ -164,9 +140,6 @@ def analyze_number_from_image(toread):
     tenyleg_ref = cv2.imread(
         "tests/test_data/exocet_heavy_digits_reference.PNG")
     tenyleg_ref = cv2.cvtColor(tenyleg_ref, cv2.COLOR_BGR2GRAY)
-
-    #toread = cv2.imread("temp_data/xp_captured.png")
-    #toread = cv2.cvtColor(toread, cv2.COLOR_BGR2GRAY)
 
     # find contours in the OCR-A image (i.e,. the outlines of the digits)
     # sort them from left to right, and initialize a dictionary to map
@@ -187,7 +160,6 @@ def analyze_number_from_image(toread):
         # it to a fixed size
         (x, y, w, h) = cv2.boundingRect(c)
         roi = toread[y:y + h, x:x + w]
-        #roi = cv2.resize(roi, (57, 88))
         roi = invert_image(roi)
         moech = cv2.matchTemplate(tenyleg_ref, roi, cv2.TM_CCORR_NORMED)
 
