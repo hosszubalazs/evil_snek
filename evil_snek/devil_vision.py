@@ -64,11 +64,12 @@ def blur_test(image, kernel=3):
 def bw_and_normalize(image):
     grayed = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     normalized = cv2.normalize(grayed, grayed, 0, 255, cv2.NORM_MINMAX)
-    return normalized
+    return threshold_chracter_text(normalized)
 
 
-def crop_and_grayfi_property(character_tab_screenshot, x_start_rel, x_size_rel, y_start_rel):
-    height, width, channels = character_tab_screenshot.shape
+def crop_and_grayfi_property(character_tab_screenshot, x_start_rel, x_size_rel, y_start_rel, post_processing=0):
+    height = character_tab_screenshot.shape[0]
+    width = character_tab_screenshot.shape[1]
     x_start_abs = int(x_start_rel * width)
     x_size_abs = int(x_size_rel * width)
     y_start_abs = int(y_start_rel * height)
@@ -76,67 +77,54 @@ def crop_and_grayfi_property(character_tab_screenshot, x_start_rel, x_size_rel, 
     cropped = character_tab_screenshot[y_start_abs:y_start_abs +
                                        y_size_abs, x_start_abs:x_start_abs+x_size_abs]
 
-    thresholded = threshold_chracter_text(cropped)
-    grayed = cv2.cvtColor(thresholded, cv2.COLOR_BGR2GRAY)
+    final = 0
 
-    return grayed
+    # Some cases, like the health points which can be colored, require special processing.
+    # This if makes that possible, while still providing a strong default flow.
+    if post_processing != 0:
+        final = post_processing(cropped)
+    else:
+        thresholded = threshold_chracter_text(cropped)
+        final = cv2.cvtColor(thresholded, cv2.COLOR_BGR2GRAY)
+
+    return final
 
 
 def crop_xp(character_tab_screenshot):
-    x_start_rel = 470/1400
-    x_size_rel = 190/1400
-    y_start_rel = 125/1050
-    return crop_and_grayfi_property(character_tab_screenshot, x_start_rel, x_size_rel, y_start_rel)
+    x_start = 470/1400
+    x_size = 190/1400
+    y_start = 125/1050
+
+    return crop_and_grayfi_property(character_tab_screenshot, x_start, x_size, y_start)
 
 
 def crop_nextlvl_xp(character_tab_screenshot):
-    height, width, channels = character_tab_screenshot.shape
+    x_start = 470/1400
+    x_size = 190/1400
+    y_start = 185/1050
 
-    x_start = int(470/1400 * width)
-    x_size = int(190/1400 * width)
-
-    y_start = int(185/1050 * height)
-    y_size = int(30/1050 * height)
-    cropped = character_tab_screenshot[y_start:y_start +
-                                       y_size, x_start:x_start+x_size]
-
-    thresholded = threshold_chracter_text(cropped)
-    grayed = cv2.cvtColor(thresholded, cv2.COLOR_BGR2GRAY)
-
-    return grayed
+    return crop_and_grayfi_property(character_tab_screenshot, x_start, x_size, y_start)
 
 
 def crop_gold(character_tab_screenshot):
-    height, width, channels = character_tab_screenshot.shape
+    x_start = 470/1400
+    x_size = 190/1400
+    y_start = 295/1050
 
-    x_start = int(470/1400 * width)
-    x_size = int(190/1400 * width)
-
-    y_start = int(295/1050 * height)
-    y_size = int(30/1050 * height)
-    cropped = character_tab_screenshot[y_start:y_start +
-                                       y_size, x_start:x_start+x_size]
-    thresholded = threshold_chracter_text(cropped)
-    grayed = cv2.cvtColor(thresholded, cv2.COLOR_BGR2GRAY)
-
-    return grayed
+    return crop_and_grayfi_property(character_tab_screenshot, x_start, x_size, y_start)
 
 
 def crop_hp(character_tab_screenshot):
-    height, width, channels = character_tab_screenshot.shape
-    x_start = int(142/640 * width)
-    x_size = int(35/640 * width)
+    x_start = 142/640
+    x_size = 35/640
+    y_start = 293/480
 
-    y_start = int(293/480 * height)
-    y_size = int(30/1050 * height)
-    cropped = character_tab_screenshot[y_start:y_start +
-                                       y_size, x_start:x_start+x_size]
+    # since the healtpoint can be colored, normalization will be needed before thresholding
+    # this is solved by an extra helper function
+    cropped = crop_and_grayfi_property(
+        character_tab_screenshot, x_start, x_size, y_start, bw_and_normalize)
 
-    # since the hp can have color
-    normalized = bw_and_normalize(cropped)
-    thresholded = threshold_chracter_text(normalized)
-
-    return thresholded
+    return cropped
 
 
 def analyze_number_from_image(toread):
