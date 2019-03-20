@@ -203,16 +203,3 @@ def opencv_fun(window_dimensions, temp_data_path):
         if cv2.waitKey(25) & 0xFF == ord('q'):
             cv2.destroyAllWindows()
             break
-        # h, s, v = HSV[:, :, 0], HSV[:, :, 1], HSV[:, :, 2]
-        # cv2.imshow('HSV->Canny', cv2.Canny(HSV, 300, 800))
-        # cv2.imshow('Grayscale Diablo', h)
-        # cv2.imshow('Grayscale Diablo', s)
-        # cv2.imshow('Grayscale Diablo', cv2.Canny(h, 100, 800))
-        # cv2.imshow('Grayscale Diablo', cv2.Canny(img, 150, 600))
-        # img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        # kernel_size = 3
-        # gaussian_blurred = cv2.GaussianBlur(
-        #    HSV, (kernel_size, kernel_size), 0)
-        # blurred_edge = cv2.Canny(gaussian_blurred, 100, 800)
-        # new_frame = blurred_edge
-        # final = blurred_edge
