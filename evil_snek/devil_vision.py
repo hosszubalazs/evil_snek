@@ -67,21 +67,26 @@ def bw_and_normalize(image):
     return normalized
 
 
-def crop_xp(character_tab_screenshot):
+def crop_and_grayfi_property(character_tab_screenshot, x_start_rel, x_size_rel, y_start_rel):
     height, width, channels = character_tab_screenshot.shape
-
-    x_start = int(470/1400 * width)
-    x_size = int(190/1400 * width)
-
-    y_start = int(125/1050 * height)
-    y_size = int(30/1050 * height)
-    cropped = character_tab_screenshot[y_start:y_start +
-                                       y_size, x_start:x_start+x_size]
+    x_start_abs = int(x_start_rel * width)
+    x_size_abs = int(x_size_rel * width)
+    y_start_abs = int(y_start_rel * height)
+    y_size_abs = int(30/1050 * height)
+    cropped = character_tab_screenshot[y_start_abs:y_start_abs +
+                                       y_size_abs, x_start_abs:x_start_abs+x_size_abs]
 
     thresholded = threshold_chracter_text(cropped)
     grayed = cv2.cvtColor(thresholded, cv2.COLOR_BGR2GRAY)
 
     return grayed
+
+
+def crop_xp(character_tab_screenshot):
+    x_start_rel = 470/1400
+    x_size_rel = 190/1400
+    y_start_rel = 125/1050
+    return crop_and_grayfi_property(character_tab_screenshot, x_start_rel, x_size_rel, y_start_rel)
 
 
 def crop_nextlvl_xp(character_tab_screenshot):
