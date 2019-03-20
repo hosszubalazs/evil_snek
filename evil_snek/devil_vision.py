@@ -153,7 +153,7 @@ def analyze_number_from_image(image_of_number):
         match = cv2.matchTemplate(all_numbers, roi, cv2.TM_CCORR_NORMED)
 
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(match)
-        print("max_loc:{}", max_loc)
+        #print("max_loc:{}", max_loc)
         convert_this_str_to_int += "{}".format(alma[max_loc[0]])
 
     return int(convert_this_str_to_int)

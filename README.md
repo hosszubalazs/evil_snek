@@ -12,6 +12,25 @@ This solution is heavily inspired by :
 
 ## Current state
 
+### Understanding the game state
+
+Running the application will analyse the character tab. It will automatically be opened, taken a screenshot of, and closed, every 3 seconds.
+The screenshot is used for further analysis. Currently the following properties are cropped and analysed:
+
+- Current XP points
+- XP points needed for next level
+- Current health points
+- Gold
+
+Based on the current solution it should be low effort to analyse all interesting properties from this screen.
+This is an experimental behaviour at the moment.
+
+### Giving actions to the game
+
+Using Win32 API the python app successfully sends mouse and keyboard events to the game, mocking user input. This is effectively in use to open and close the character tab with the letter 'c'.
+
+### Figuring out what is a good step to take
+
 A proof-of-concept feedback loop is in place. User interactions (mouse clicks and keyboard presses) can be sent to the game. using this technique the character tabs is opened and screenshotted. After cropping for the intersting part of the image, the number of current experience is determined by OCR. This number is logged into a temporary CSV file. The character is not controlled in any way yet, using clicks that should be possible.
 The plan is to focus on a minimum viable solution for a warrior character. (probably following a very simple 1h weapon+shield strategy). As the solution matures it might be possible:
 
@@ -28,10 +47,9 @@ The project only works on Microsoft Windows operating system. As Diablo is only 
 
 1. Obtain [Diablo](https://www.gog.com/game/diablo) from GoG
 2. Checkout the repository, activate the virtual environment, install dependencies
-3. Install Tesseract 4.0 64 bit binary from [UB-Mannheim Tesseract](https://github.com/UB-Mannheim/tesseract/wiki). Add `tesseract.exe` to your path. You can also check the [PyTesseract](https://pypi.org/project/pytesseract/) installation guide.
-4. Start Diablo in windowed mode in 640x480. Diablo should appear in the center of the screen.
-5. Start the app: `python evil_snek\app.py`
-6. Marvel in the beauty and uselessness of the currently available OpenCV filters
+3. Start Diablo in windowed mode. Currently the cropping expects that the window title bar is visible, do not use fullscreen-windowed mode.
+4. Start the app: `python evil_snek\app.py`
+5. Marvel in the beauty..
 
 ## Tooling
 

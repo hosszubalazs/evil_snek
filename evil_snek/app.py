@@ -37,6 +37,8 @@ def report_current_xp(diablo_window_dimensions):
         devil_vision.save_image(
             TEMP_DATA_PATH, "character_screen_captured.png", character_tab_screenshot)
 
+        # FIXME Too much duplication, please clean up.
+
         #
         # XP
         #
@@ -46,6 +48,16 @@ def report_current_xp(diablo_window_dimensions):
         xp = devil_vision.analyze_number_from_image(img_of_xp)
         print(time.time())
         print("xp=", xp)
+
+        #
+        # XP needed for next level
+        #
+        img_of_nextlvl_xp = devil_vision.crop_nextlvl_xp(character_tab_screenshot)
+        devil_vision.save_image(TEMP_DATA_PATH, "xp_nextlvl_captured.png", img_of_nextlvl_xp)
+        #xp = evil_ocr.read_single_int(img_of_xp)
+        nextlvl_xp = devil_vision.analyze_number_from_image(img_of_nextlvl_xp)
+        print(time.time())
+        print("nextlvl_xp=", nextlvl_xp)
 
         #
         # GOLD
