@@ -27,55 +27,53 @@ from tests import TEST_DATA_PATH
 
 # Canny edge detection --> change to --> Holistically-Nested Edge Detection https://www.pyimagesearch.com/2019/03/04/holistically-nested-edge-detection-with-opencv-and-deep-learning/
 
+
+def character_tab_test_helper(file_name, property_name, expected_value):
+    test_chracter_sheet = cv2.imread(TEST_DATA_PATH+file_name)
+    cropped_image = 0
+    # FIXME : this complicated if structure is really not nice. devil_vision should support more dynamic picture cutting.
+    if property_name == "xp":
+        cropped_image = devil_vision.crop_xp(test_chracter_sheet)
+    elif property_name == "nextlvl_xp":
+        cropped_image = devil_vision.crop_nextlvl_xp(test_chracter_sheet)
+    elif property_name == "gold":
+        cropped_image = devil_vision.crop_gold(test_chracter_sheet)
+    elif property_name == "hp":
+        cropped_image = devil_vision.crop_hp(test_chracter_sheet)
+
+    actual_value = devil_vision.analyze_number_from_image(cropped_image)
+    assert actual_value == expected_value
+
+
 def test_crop_ocr_xp_1440_0():
-    img = cv2.imread(TEST_DATA_PATH+'character_screen_1440_0.png')
-    xp_picture = devil_vision.crop_xp(img)
-    xp_value = devil_vision.analyze_number_from_image(xp_picture)
-    assert xp_value == 90910
+    character_tab_test_helper('character_screen_1440_0.png', "xp", 90910)
+
 
 def test_crop_ocr_nextlvl_xp_1440_0():
-    img = cv2.imread(TEST_DATA_PATH+'character_screen_1440_0.png')
-    nextlvl_xp_picture = devil_vision.crop_nextlvl_xp(img)
-    nextlvl_xp_value = devil_vision.analyze_number_from_image(nextlvl_xp_picture)
-    assert nextlvl_xp_value == 108879
+    character_tab_test_helper(
+        'character_screen_1440_0.png', "nextlvl_xp", 108879)
 
 
 def test_crop_ocr_gold_1440_0():
-    img = cv2.imread(TEST_DATA_PATH+'character_screen_1440_0.png')
-    gold_picture = devil_vision.crop_gold(img)
-    gold_value = devil_vision.analyze_number_from_image(gold_picture)
-    assert gold_value == 2587
+    character_tab_test_helper('character_screen_1440_0.png', "gold", 2587)
 
 
 def test_crop_ocr_hp_1440_0():
-    img = cv2.imread(TEST_DATA_PATH+'character_screen_1440_0.png')
-    hp_picture = devil_vision.crop_hp(img)
-    hp_value = devil_vision.analyze_number_from_image(hp_picture)
-    assert hp_value == 83
+    character_tab_test_helper('character_screen_1440_0.png', "hp", 83)
 
 
 def test_crop_ocr_xp_1440_1():
-    img = cv2.imread(TEST_DATA_PATH+'character_screen_1440_1.png')
-    xp_picture = devil_vision.crop_xp(img)
-    xp_value = devil_vision.analyze_number_from_image(xp_picture)
-    assert xp_value == 81769
+    character_tab_test_helper('character_screen_1440_1.png', "xp", 81769)
+
 
 def test_crop_ocr_nextlvl_xp_1440_1():
-    img = cv2.imread(TEST_DATA_PATH+'character_screen_1440_1.png')
-    nextlvl_xp_picture = devil_vision.crop_nextlvl_xp(img)
-    nextlvl_xp_value = devil_vision.analyze_number_from_image(nextlvl_xp_picture)
-    assert nextlvl_xp_value == 83419
+    character_tab_test_helper(
+        'character_screen_1440_1.png', "nextlvl_xp", 83419)
 
 
 def test_crop_ocr_gold_1440_1():
-    img = cv2.imread(TEST_DATA_PATH+'character_screen_1440_1.png')
-    gold_picture = devil_vision.crop_gold(img)
-    gold_value = devil_vision.analyze_number_from_image(gold_picture)
-    assert gold_value == 1835
+    character_tab_test_helper('character_screen_1440_1.png', "gold", 1835)
 
 
 def test_crop_ocr_hp_1440_1():
-    img = cv2.imread(TEST_DATA_PATH+'character_screen_1440_1.png')
-    hp_picture = devil_vision.crop_hp(img)
-    hp_value = devil_vision.analyze_number_from_image(hp_picture)
-    assert hp_value == 61
+    character_tab_test_helper('character_screen_1440_1.png', "hp", 61)
