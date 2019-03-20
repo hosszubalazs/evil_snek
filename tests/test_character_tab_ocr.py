@@ -33,6 +33,12 @@ def test_crop_ocr_xp_1440_0():
     xp_value = devil_vision.analyze_number_from_image(xp_picture)
     assert xp_value == 90910
 
+def test_crop_ocr_nextlvl_xp_1440_0():
+    img = cv2.imread(TEST_DATA_PATH+'character_screen_1440_0.png')
+    nextlvl_xp_picture = devil_vision.crop_nextlvl_xp(img)
+    nextlvl_xp_value = devil_vision.analyze_number_from_image(nextlvl_xp_picture)
+    assert nextlvl_xp_value == 108879
+
 
 def test_crop_ocr_gold_1440_0():
     img = cv2.imread(TEST_DATA_PATH+'character_screen_1440_0.png')
@@ -53,6 +59,12 @@ def test_crop_ocr_xp_1440_1():
     xp_picture = devil_vision.crop_xp(img)
     xp_value = devil_vision.analyze_number_from_image(xp_picture)
     assert xp_value == 81769
+
+def test_crop_ocr_nextlvl_xp_1440_1():
+    img = cv2.imread(TEST_DATA_PATH+'character_screen_1440_1.png')
+    nextlvl_xp_picture = devil_vision.crop_nextlvl_xp(img)
+    nextlvl_xp_value = devil_vision.analyze_number_from_image(nextlvl_xp_picture)
+    assert nextlvl_xp_value == 83419
 
 
 def test_crop_ocr_gold_1440_1():

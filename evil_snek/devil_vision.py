@@ -93,6 +93,30 @@ def crop_xp(character_tab_screenshot):
     return grayed
 
 
+def crop_nextlvl_xp(character_tab_screenshot):
+    height, width, channels = character_tab_screenshot.shape
+    # tag
+    x_start = int(470/1400 * width)
+    x_size = int(190/1400 * width)
+
+    # szuk --> Sokkal rosszabb
+    #x_start = int(510/1400 * width)
+    #x_size = int(110/1400 * width)
+
+    y_start = int(185/1050 * height)
+    y_size = int(30/1050 * height)
+    cropped = character_tab_screenshot[y_start:y_start +
+                                       y_size, x_start:x_start+x_size]
+
+    #gaussian_blurred_2 = cv2.GaussianBlur(thresh1, (3, 3), 0)
+    thresholded = threshold_chracter_text(cropped)
+    grayed = cv2.cvtColor(thresholded, cv2.COLOR_BGR2GRAY)
+
+    #blurred = blur_test(thresholded)
+    #inverted = invert_image(blurred)
+    return grayed
+
+
 def crop_gold(character_tab_screenshot):
     height, width, channels = character_tab_screenshot.shape
 
@@ -137,7 +161,8 @@ def crop_hp(character_tab_screenshot):
 def analyze_number_from_image(toread):
     magiced_number = 0
 
-    tenyleg_ref = cv2.imread("tests/test_data/exocet_heavy_digits_reference.PNG")
+    tenyleg_ref = cv2.imread(
+        "tests/test_data/exocet_heavy_digits_reference.PNG")
     tenyleg_ref = cv2.cvtColor(tenyleg_ref, cv2.COLOR_BGR2GRAY)
 
     #toread = cv2.imread("temp_data/xp_captured.png")
@@ -151,8 +176,8 @@ def analyze_number_from_image(toread):
     toreadCnts = imutils.grab_contours(toreadCnts)
     toreadCnts = contours.sort_contours(toreadCnts, method="left-to-right")[0]
 
-    alma = {1: "1", 2: "1", 3: "1", 14: "2", 15: "2", 30: "3", 31: "3", 45: "4", 62: "5", 63: "5", 78: "6",
-            79: "6", 93: "7", 94: "7", 95:"7", 110: "8", 111: "8", 112: "8", 128: "9", 143: "0", 144:"0"}
+    alma = {1: "1", 2: "1", 3: "1", 14: "2", 15: "2", 30: "3", 31: "3", 45: "4", 46: "4", 47: "4", 62: "5", 63: "5", 78: "6",
+            79: "6", 93: "7", 94: "7", 95: "7", 110: "8", 111: "8", 112: "8", 128: "9", 143: "0", 144: "0"}
 
     convert_this_str_to_int = ""
     # loop over the OCR-A reference contours
