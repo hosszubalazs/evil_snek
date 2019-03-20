@@ -6,6 +6,7 @@
 This repository is an attempt at creating a bot that plays Diablo 1. The game is only analysed from it's UI, not by direct memory access. The repository is in a super-early stage, with nothing useful in it for the moment.
 
 This solution is heavily inspired by :
+
 - [Python plays Grand Theft Auto V](https://www.youtube.com/watch?v=ks4MPfMq8aQ)
 - [Credit card OCR with OpenCV and Python](https://www.pyimagesearch.com/2017/07/17/credit-card-ocr-with-opencv-and-python/)
 
@@ -37,7 +38,7 @@ The project only works on Microsoft Windows operating system. As Diablo is only 
 - [MSS](https://pypi.org/project/mss/) -> Grab the screenshot of the game, [docs here help a lot](https://python-mss.readthedocs.io/examples.html#opencv-numpy)
 - [OpenCV 4.0](https://pypi.org/project/opencv-python/) -> Process the image stream
 - [pywin32](https://pypi.org/project/pywin32/), WIN32 API PostMessage --> Send keyboard and mouse events to the window, simulating user input
-- [Tesseract](https://github.com/tesseract-ocr/tesseract), through [pytesseract](https://pypi.org/project/pytesseract/) --> Optical Character recognition (OCR).
+- OpenCV Template matching ( with some other image preprocessing)--> Optical Character recognition (OCR).
 - [Docker](https://www.docker.com/) --> for automating tests. Linux containers are used, this is kindof cheating, but automating the setup of Tesseract in Windows did not work out.
   
 ## Automating keyboard and mouse messages
@@ -65,12 +66,10 @@ Return to town. Recover health. Sell extra items. Repair items. Spend money, buy
 
 Managing the character, allocating character points. The ideal distribution is heavily dependent on the exact strategy of the character. Needs to work well together with inventory management, as items have certain requirements.
 
-## Tesseract notes
+## Why not Tesseract
 
-1. Diablo is using the [Exocet](https://fonts.adobe.com/fonts/exocet) font. The basic dictionary [was not trained](https://github.com/tesseract-ocr/tesseract/blob/master/src/training/language-specific.sh) with this font, but nevertheless Tesseract seems to function good enough for recognising the number
-2. Cut tight! A good cut is worth more then filtering.
-3. Use the correct PSM mode, ideally PSM 8 for single word (even for numbers)
-4. If you are expecting only digits, download and use the [user-made digits-only dictionary](https://github.com/Shreeshrii/tessdata_shreetest). Tesseract 4 [does not support](https://github.com/tesseract-ocr/tesseract/issues/751) whitelist/blacklist.
-5. Low resolution (running in 640#480 window) does not seem to be an issue. So far when manually cut, numbers were correctly analysed even without any picture processing!
+Tesseract was used as an Optical Character Recognition (OCR) engine, but was deprecated. It turned out to be very unreliable for my application, it was designed for other purposes really:
 
-Further resource : [An Overview of the Tesseract OCR Engine](http://static.googleusercontent.com/media/research.google.com/en//pubs/archive/33418.pdf)
+- Tesseract can identify the location of text in an image. I do not need this. The game UI is pretty static, I have a very good approximation on where the text will be.
+- Off-the-shelf trained data (official or community) is not trained for [Exocet](https://fonts.adobe.com/fonts/exocet), the font of Diablo. The game mostly only uses this one font. The usual models are trained on a lot of fonts, [but not on Exocet](https://github.com/tesseract-ocr/tesseract/blob/master/src/training/language-specific.sh)
+- Results were very brittle for changes in source data. Cutting the image 1-2 pixels differently ( not cutting into the important parts, doing preprocessing to eliminate background noise) created very chaotic results. It was really hard to progress in the development with confidence.
