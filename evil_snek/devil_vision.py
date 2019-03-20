@@ -57,10 +57,6 @@ def threshold_chracter_text(image):
     return thresh2
 
 
-def blur_test(image, kernel=3):
-    return cv2.GaussianBlur(image, (kernel, kernel), 0)
-
-
 def bw_and_normalize(image):
     grayed = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     normalized = cv2.normalize(grayed, grayed, 0, 255, cv2.NORM_MINMAX)
