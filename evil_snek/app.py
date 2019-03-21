@@ -17,6 +17,7 @@ WHND = 0
 # For debugging purposes we are creating throwaway screenshots when the app is runnig.
 # Keep this path up-to-date with .gitignore.
 TEMP_DATA_PATH = "temp_data"
+LOG_FILE_NAME = "character_log.csv"
 
 
 def create_folder(folder_path):
@@ -35,15 +36,15 @@ def report_current_xp(diablo_window_dimensions):
     # Removing previous file, starting from a clean slate
     # Structure might have changed since last run.
     try:
-        os.remove(TEMP_DATA_PATH + '/xp_log.csv')
+        os.remove(TEMP_DATA_PATH + '/' + LOG_FILE_NAME)
     except OSError:
         print("Previous CSV file could not be removed, probably does not exist.")
     else:
         print("Previous CSV file removed.")
 
-    log_header = 'timestamp,xp,nextlvl_xp,gold,hp'
+    log_header = 'timestamp,xp,nextlvl_xp,gold,hp,hp_max,mana,mana_max'
     print(log_header)
-    with open(TEMP_DATA_PATH + '/xp_log.csv', 'a') as xp_csv:
+    with open(TEMP_DATA_PATH + '/' + LOG_FILE_NAME, 'a') as xp_csv:
         xp_csv.write(log_header + '\n')
     while 1:
         # 1. openCv -> Cut part of the image
@@ -78,14 +79,26 @@ def report_current_xp(diablo_window_dimensions):
         gold = devil_vision.analyze_number_from_image(img_of_gold)
 
         # HP
-        img_of_hp = devil_vision.crop_hp(character_tab_screenshot)
-        hp = devil_vision.analyze_number_from_image(img_of_hp)
+        img = devil_vision.crop_hp(character_tab_screenshot)
+        hp = devil_vision.analyze_number_from_image(img)
+
+        # HP MAX
+        img = devil_vision.crop_hp_max(character_tab_screenshot)
+        hp_max = devil_vision.analyze_number_from_image(img)
+
+        # Mana
+        img = devil_vision.crop_mana(character_tab_screenshot)
+        mana = devil_vision.analyze_number_from_image(img)
+
+        # Mana MAX
+        img = devil_vision.crop_mana_max(character_tab_screenshot)
+        mana_max = devil_vision.analyze_number_from_image(img)
 
         # Logging
-        log_line = '{},{},{},{},{}'.format(
-            time.time(), xp, nextlvl_xp, gold, hp)
+        log_line = '{},{},{},{},{},{},{},{}'.format(
+            time.time(), xp, nextlvl_xp, gold, hp, hp_max, mana, mana_max)
         print(log_line)
-        with open(TEMP_DATA_PATH + '/xp_log.csv', 'a') as xp_csv:
+        with open(TEMP_DATA_PATH + '/' + LOG_FILE_NAME, 'a') as xp_csv:
             xp_csv.write(log_line + '\n')
 
         # Let's do periodic checks on how the value is changing.
