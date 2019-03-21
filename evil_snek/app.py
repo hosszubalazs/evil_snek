@@ -8,7 +8,6 @@ import threading
 import ctypes
 
 import fake_ui
-import evil_ocr
 import devil_vision
 import os
 
@@ -89,7 +88,7 @@ def report_current_xp(diablo_window_dimensions):
         with open(TEMP_DATA_PATH + '/xp_log.csv', 'a') as xp_csv:
             xp_csv.write(log_line + '\n')
 
-        # Let's do periodic check on how the value is changing.
+        # Let's do periodic checks on how the value is changing.
         time.sleep(3)
 
 

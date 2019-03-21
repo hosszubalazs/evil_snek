@@ -1,6 +1,6 @@
 import cv2
 import numpy
-from evil_snek import evil_ocr, devil_vision
+from evil_snek import devil_vision
 from tests import TEST_DATA_PATH
 
 

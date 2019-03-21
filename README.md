@@ -54,7 +54,7 @@ The project only works on Microsoft Windows operating system. As Diablo is only 
 - [OpenCV 4.0](https://pypi.org/project/opencv-python/) -> Process the image stream
 - [pywin32](https://pypi.org/project/pywin32/), WIN32 API PostMessage --> Send keyboard and mouse events to the window, simulating user input
 - OpenCV Template matching ( with some other image preprocessing)--> Optical Character recognition (OCR).
-- [Docker](https://www.docker.com/) --> for automating tests. Linux containers are used, this is kindof cheating, but automating the setup of Tesseract in Windows did not work out.
+- [Docker](https://www.docker.com/) --> for automating tests. Linux containers are used.
   
 ## Automating keyboard and mouse messages
 
