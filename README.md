@@ -15,12 +15,7 @@ This solution is heavily inspired by :
 ### Understanding the game state
 
 Running the application will analyse the character tab. It will automatically be opened, taken a screenshot of, and closed, every 3 seconds.
-The screenshot is used for further analysis. Currently the following properties are cropped and analysed:
-
-- Current XP points
-- XP points needed for next level
-- Current health points
-- Gold
+The screenshot is used for further analysis. Several properties are analysed, like experience and health. Please check the tests for up-to-date info.
 
 Based on the current solution it should be low effort to analyse all interesting properties from this screen.
 This is an experimental behaviour at the moment.
