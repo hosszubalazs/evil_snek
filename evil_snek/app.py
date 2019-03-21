@@ -62,46 +62,29 @@ def report_current_xp(diablo_window_dimensions):
 
         # FIXME Too much duplication, please clean up.
 
-        #
         # XP
-        #
         img_of_xp = devil_vision.crop_xp(character_tab_screenshot)
-        devil_vision.save_image(TEMP_DATA_PATH, "xp_captured.png", img_of_xp)
-        #xp = evil_ocr.read_single_int(img_of_xp)
         xp = devil_vision.analyze_number_from_image(img_of_xp)
 
-        #
         # XP needed for next level
-        #
         img_of_nextlvl_xp = devil_vision.crop_nextlvl_xp(
             character_tab_screenshot)
-        devil_vision.save_image(
-            TEMP_DATA_PATH, "xp_nextlvl_captured.png", img_of_nextlvl_xp)
-        #xp = evil_ocr.read_single_int(img_of_xp)
         nextlvl_xp = devil_vision.analyze_number_from_image(img_of_nextlvl_xp)
 
-        #
         # GOLD
-        #
         img_of_gold = devil_vision.crop_gold(character_tab_screenshot)
-        devil_vision.save_image(
-            TEMP_DATA_PATH, "gold_captured.png", img_of_gold)
-        #gold = evil_ocr.read_single_int(img_of_gold)
         gold = devil_vision.analyze_number_from_image(img_of_gold)
 
-        #
         # HP
-        #
         img_of_hp = devil_vision.crop_hp(character_tab_screenshot)
-        devil_vision.save_image(
-            TEMP_DATA_PATH, "hp_captured.png", img_of_hp)
-        #hp = evil_ocr.read_single_int(img_of_hp)
         hp = devil_vision.analyze_number_from_image(img_of_hp)
+
+        # Logging
         log_line = '{},{},{},{},{}'.format(
             time.time(), xp, nextlvl_xp, gold, hp)
         print(log_line)
         with open(TEMP_DATA_PATH + '/xp_log.csv', 'a') as xp_csv:
-            xp_csv.write(log_line+ '\n')
+            xp_csv.write(log_line + '\n')
 
         # Let's do periodic check on how the value is changing.
         time.sleep(3)
