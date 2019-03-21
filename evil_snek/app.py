@@ -10,6 +10,7 @@ import ctypes
 import fake_ui
 import evil_ocr
 import devil_vision
+import os
 
 # WIN32 Window Handler, not yet initialized
 WHND = 0
@@ -19,10 +20,32 @@ WHND = 0
 TEMP_DATA_PATH = "temp_data"
 
 
+def create_folder(folder_path):
+    try:
+        os.mkdir(folder_path)
+    except OSError:
+        print("Creation of the directory %s failed" % folder_path)
+    else:
+        print("Successfully created the directory %s " % folder_path)
+
+
 def report_current_xp(diablo_window_dimensions):
 
-    #time.sleep(3)
-    devil_vision.create_folder(TEMP_DATA_PATH)
+    # time.sleep(3)
+    create_folder(TEMP_DATA_PATH)
+    # Removing previous file, starting from a clean slate
+    # Structure might have changed since last run.
+    try:
+        os.remove(TEMP_DATA_PATH + '/xp_log.csv')
+    except OSError:
+        print("Previous CSV file could not be removed, probably does not exist.")
+    else:
+        print("Previous CSV file removed.")
+
+    log_header = 'timestamp,xp,nextlvl_xp,gold,hp'
+    print(log_header)
+    with open(TEMP_DATA_PATH + '/xp_log.csv', 'a') as xp_csv:
+        xp_csv.write(log_header + '\n')
     while 1:
         # 1. openCv -> Cut part of the image
         fake_ui.press_button(WHND, fake_ui.C_VK, fake_ui.C_SC)
@@ -46,18 +69,16 @@ def report_current_xp(diablo_window_dimensions):
         devil_vision.save_image(TEMP_DATA_PATH, "xp_captured.png", img_of_xp)
         #xp = evil_ocr.read_single_int(img_of_xp)
         xp = devil_vision.analyze_number_from_image(img_of_xp)
-        print(time.time())
-        print("xp=", xp)
 
         #
         # XP needed for next level
         #
-        img_of_nextlvl_xp = devil_vision.crop_nextlvl_xp(character_tab_screenshot)
-        devil_vision.save_image(TEMP_DATA_PATH, "xp_nextlvl_captured.png", img_of_nextlvl_xp)
+        img_of_nextlvl_xp = devil_vision.crop_nextlvl_xp(
+            character_tab_screenshot)
+        devil_vision.save_image(
+            TEMP_DATA_PATH, "xp_nextlvl_captured.png", img_of_nextlvl_xp)
         #xp = evil_ocr.read_single_int(img_of_xp)
         nextlvl_xp = devil_vision.analyze_number_from_image(img_of_nextlvl_xp)
-        print(time.time())
-        print("nextlvl_xp=", nextlvl_xp)
 
         #
         # GOLD
@@ -67,7 +88,6 @@ def report_current_xp(diablo_window_dimensions):
             TEMP_DATA_PATH, "gold_captured.png", img_of_gold)
         #gold = evil_ocr.read_single_int(img_of_gold)
         gold = devil_vision.analyze_number_from_image(img_of_gold)
-        print("gold=", gold)
 
         #
         # HP
@@ -77,10 +97,12 @@ def report_current_xp(diablo_window_dimensions):
             TEMP_DATA_PATH, "hp_captured.png", img_of_hp)
         #hp = evil_ocr.read_single_int(img_of_hp)
         hp = devil_vision.analyze_number_from_image(img_of_hp)
-        print("hp=", hp)
-
+        log_line = '{},{},{},{},{}'.format(
+            time.time(), xp, nextlvl_xp, gold, hp)
+        print(log_line)
         with open(TEMP_DATA_PATH + '/xp_log.csv', 'a') as xp_csv:
-            xp_csv.write('{},{}\n'.format(time.time(), xp))
+            xp_csv.write(log_line+ '\n')
+
         # Let's do periodic check on how the value is changing.
         time.sleep(3)
 
