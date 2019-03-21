@@ -49,14 +49,17 @@ def report_current_xp(diablo_window_dimensions):
     while 1:
         # 1. openCv -> Cut part of the image
         fake_ui.press_button(WHND, fake_ui.C_VK, fake_ui.C_SC)
+        # If there is no sleep at all, the screenshot taking happens before the panel is opened.
+        # The 0.1 second can be probably optimized but this is not an important detail for now.
         time.sleep(0.1)
 
         character_tab_screenshot = devil_vision.take_screenshot(
             diablo_window_dimensions)
-        time.sleep(0.1)
 
         fake_ui.press_button(WHND, fake_ui.C_VK, fake_ui.C_SC)
 
+        # Saving this screenshot is widely used for all kinds of debugging purposes.
+        # Saving the image is not needed for the program flow, but for practical reasons lets keep this live.
         devil_vision.save_image(
             TEMP_DATA_PATH, "character_screen_captured.png", character_tab_screenshot)
 
