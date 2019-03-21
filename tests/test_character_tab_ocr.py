@@ -40,6 +40,12 @@ def character_tab_test_helper(file_name, property_name, expected_value):
         cropped_image = devil_vision.crop_gold(test_chracter_sheet)
     elif property_name == "hp":
         cropped_image = devil_vision.crop_hp(test_chracter_sheet)
+    elif property_name == "hp_max":
+        cropped_image = devil_vision.crop_hp_max(test_chracter_sheet)
+    elif property_name == "mana":
+        cropped_image = devil_vision.crop_mana(test_chracter_sheet)
+    elif property_name == "mana_max":
+        cropped_image = devil_vision.crop_mana_max(test_chracter_sheet)
 
     actual_value = devil_vision.analyze_number_from_image(cropped_image)
     assert actual_value == expected_value
@@ -62,6 +68,18 @@ def test_crop_ocr_hp_1440_0():
     character_tab_test_helper('character_screen_1440_0.png', "hp", 83)
 
 
+def test_crop_ocr_hp_max_1440_0():
+    character_tab_test_helper('character_screen_1440_0.png', "hp_max", 102)
+
+
+def test_crop_ocr_mana_1440_0():
+    character_tab_test_helper('character_screen_1440_0.png', "mana", 19)
+
+
+def test_crop_ocr_mana_max_1440_0():
+    character_tab_test_helper('character_screen_1440_0.png', "mana_max", 19)
+
+
 def test_crop_ocr_xp_1440_1():
     character_tab_test_helper('character_screen_1440_1.png', "xp", 81769)
 
@@ -77,3 +95,15 @@ def test_crop_ocr_gold_1440_1():
 
 def test_crop_ocr_hp_1440_1():
     character_tab_test_helper('character_screen_1440_1.png', "hp", 61)
+
+
+def test_crop_ocr_hp_max_1440_1():
+    character_tab_test_helper('character_screen_1440_1.png', "hp_max", 100)
+
+
+def test_crop_ocr_mana_1440_1():
+    character_tab_test_helper('character_screen_1440_1.png', "mana", 18)
+
+
+def test_crop_ocr_mana_max_1440_1():
+    character_tab_test_helper('character_screen_1440_1.png', "mana_max", 18)

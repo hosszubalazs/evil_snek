@@ -105,7 +105,7 @@ def crop_hp(character_tab_screenshot):
     x_size = 35/640
     y_start = 293/480
 
-    # since the healtpoint can be colored, normalization will be needed before thresholding
+    # since the health and mana points can be colored, normalization will be needed before thresholding
     # this is solved by an extra helper function
     cropped = crop_and_grayfi_property(
         character_tab_screenshot, x_start, x_size, y_start, bw_and_normalize)
@@ -113,10 +113,45 @@ def crop_hp(character_tab_screenshot):
     return cropped
 
 
+def crop_hp_max(character_tab_screenshot):
+    x_start = 205/1400
+    x_size = 70/1400
+    y_start = 293/480
+
+    cropped = crop_and_grayfi_property(
+        character_tab_screenshot, x_start, x_size, y_start)
+
+    return cropped
+
+
+def crop_mana(character_tab_screenshot):
+    x_start = 142/640
+    x_size = 35/640
+    y_start = 700/1050
+
+    # since the health and mana points can be colored, normalization will be needed before thresholding
+    # this is solved by an extra helper function
+    cropped = crop_and_grayfi_property(
+        character_tab_screenshot, x_start, x_size, y_start, bw_and_normalize)
+
+    return cropped
+
+
+def crop_mana_max(character_tab_screenshot):
+    x_start = 205/1400
+    x_size = 70/1400
+    y_start = 700/1050
+
+    cropped = crop_and_grayfi_property(
+        character_tab_screenshot, x_start, x_size, y_start)
+
+    return cropped
+
+
 def analyze_number_from_image(image_of_number):
     # Solution heavily based on : https://www.pyimagesearch.com/2017/07/17/credit-card-ocr-with-opencv-and-python/
 
-    all_numbers = cv2.imread(#"tests/test_data/exocet_digits_vertical.PNG")
+    all_numbers = cv2.imread(  # "tests/test_data/exocet_digits_vertical.PNG")
         "tests/test_data/exocet_heavy_digits_reference.PNG")
     all_numbers = cv2.cvtColor(all_numbers, cv2.COLOR_BGR2GRAY)
 
