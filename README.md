@@ -25,17 +25,14 @@ The screenshot is used for further analysis. Currently the following properties 
 Based on the current solution it should be low effort to analyse all interesting properties from this screen.
 This is an experimental behaviour at the moment.
 
-### Giving actions to the game
+### Interacting with the game
 
 Using Win32 API the python app successfully sends mouse and keyboard events to the game, mocking user input. This is effectively in use to open and close the character tab with the letter 'c'.
 
-### Figuring out what is a good step to take
+### Understanding what is a good next step to take
 
-A proof-of-concept feedback loop is in place. User interactions (mouse clicks and keyboard presses) can be sent to the game. using this technique the character tabs is opened and screenshotted. After cropping for the intersting part of the image, the number of current experience is determined by OCR. This number is logged into a temporary CSV file. The character is not controlled in any way yet, using clicks that should be possible.
-The plan is to focus on a minimum viable solution for a warrior character. (probably following a very simple 1h weapon+shield strategy). As the solution matures it might be possible:
-
-- for a single character to be dynmically ready for multiple strategies
-- to make the framework moddable, making it easy to develop AI for separate classes and strategies
+Progress here is (yet) missing. At this early stage in the project the focus is solely on understanding the environment.
+Q-learning, as a form of reinformcement learning, is planned to be applied to this problem.
 
 ## Development guide
 
