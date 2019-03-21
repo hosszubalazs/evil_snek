@@ -4,30 +4,6 @@ from evil_snek import devil_vision
 from tests import TEST_DATA_PATH
 
 
-# OCR troug image templateing --> https://www.pyimagesearch.com/2017/07/17/credit-card-ocr-with-opencv-and-python/
-# However, as I’ve mentioned multiple times in these previous posts, Tesseract should not be considered a general,
-# off-the-shelf solution for Optical Character Recognition capable of obtaining high accuracy.
-
-
-# verify algorithm against clean data. What is the best possbile outcome with Exocet ??
-
-# Csak a nagyon stabil adatot fogadjuk el.
-# Counter vagy Gauge ?
-# egyszerre milyen mertekben valtozhat?
-# Dynamic cutting. Cut the whole possible text box -> Blob analysis -> cut tight -# text analysis.
-
-# - Separate the tests based on resolution. Have the same cases in at least 2 resolutions. Understand the impact.
-# - As a metadata analyze the length, validate
-# - Train a dataset for Exocet
-
-# - use object recognition for each character
-# Accept tests with a certain success level, e.g. between 5% of expected
-# - Break up the string to characters, and identify them one by one.
-# Blob detecction ? cv2.dnn.blobFromImage
-
-# Canny edge detection --> change to --> Holistically-Nested Edge Detection https://www.pyimagesearch.com/2019/03/04/holistically-nested-edge-detection-with-opencv-and-deep-learning/
-
-
 def character_tab_test_helper(file_name, property_name, expected_value):
     test_chracter_sheet = cv2.imread(TEST_DATA_PATH+file_name)
     cropped_image = 0
