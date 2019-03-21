@@ -1,7 +1,6 @@
 import cv2
 from mss import mss
 import numpy
-import os
 import time
 import numpy
 
@@ -21,15 +20,6 @@ def initialize_window_size(window_parameters):
         "height": window_parameters.bottom - (window_parameters.top + top_margin) - bottom_margin
     }
     return window_dimensions
-
-
-def create_folder(folder_path):
-    try:
-        os.mkdir(folder_path)
-    except OSError:
-        print("Creation of the directory %s failed" % folder_path)
-    else:
-        print("Successfully created the directory %s " % folder_path)
 
 
 def take_screenshot(window_dimensions):
@@ -126,7 +116,7 @@ def crop_hp(character_tab_screenshot):
 def analyze_number_from_image(image_of_number):
     # Solution heavily based on : https://www.pyimagesearch.com/2017/07/17/credit-card-ocr-with-opencv-and-python/
 
-    all_numbers = cv2.imread(
+    all_numbers = cv2.imread(#"tests/test_data/exocet_digits_vertical.PNG")
         "tests/test_data/exocet_heavy_digits_reference.PNG")
     all_numbers = cv2.cvtColor(all_numbers, cv2.COLOR_BGR2GRAY)
 
@@ -153,6 +143,7 @@ def analyze_number_from_image(image_of_number):
         match = cv2.matchTemplate(all_numbers, roi, cv2.TM_CCORR_NORMED)
 
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(match)
+        #print("min_loc:{}", min_loc)
         #print("max_loc:{}", max_loc)
         convert_this_str_to_int += "{}".format(alma[max_loc[0]])
 
