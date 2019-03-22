@@ -29,6 +29,11 @@ Using Win32 API the python app successfully sends mouse and keyboard events to t
 Progress here is (yet) missing. At this early stage in the project the focus is solely on understanding the environment.
 Q-learning, as a form of reinformcement learning, is planned to be applied to this problem.
 
+Further resources to look into:
+
+- [Mady - Deep Reinforcement learning ](https://medium.com/deep-math-machine-learning-ai/ch-13-deep-reinforcement-learning-deep-q-learning-and-policy-gradients-towards-agi-a2a0b611617e)
+- [Reinforcement Learning: An Introduction](http://web.stanford.edu/class/psych209/Readings/SuttonBartoIPRLBook2ndEd.pdf)
+
 ## Development guide
 
 Please review `azure-pipelines.yml` for an up-to-date requirement of the environment, and steps to setup and test a fresh checkout.
@@ -48,7 +53,7 @@ The project only works on Microsoft Windows operating system. As Diablo is only 
 - [MSS](https://pypi.org/project/mss/) -> Grab the screenshot of the game, [docs here help a lot](https://python-mss.readthedocs.io/examples.html#opencv-numpy)
 - [OpenCV 4.0](https://pypi.org/project/opencv-python/) -> Process the image stream
 - [pywin32](https://pypi.org/project/pywin32/), WIN32 API PostMessage --> Send keyboard and mouse events to the window, simulating user input
-- OpenCV Template matching ( with some other image preprocessing)--> Optical Character recognition (OCR).
+- [Jupyter Notebook describing OCR](docs/ocr_by_template_matching.ipynb): OpenCV Template matching ( with some other image preprocessing) for Optical Character recognition (OCR).
 - [Docker](https://www.docker.com/) --> for automating tests. Linux containers are used.
   
 ## Automating keyboard and mouse messages
