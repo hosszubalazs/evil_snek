@@ -12,7 +12,7 @@ RUN mkdir junit
 
 # Default Python 3.6 is good enough. Pip is needed still.
 # no ned for venv, Docker is already a virtual environment
-RUN apt-get install -y python3-pip
+RUN apt-get update && apt-get install -y python3-pip
 
 # https://stackoverflow.com/questions/47113029/importerror-libsm-so-6-cannot-open-shared-object-file-no-such-file-or-directo
 # E   ImportError: libSM.so.6: cannot open shared object file: No such file or directory
