@@ -20,7 +20,7 @@ RUN apt-get install -y libsm6 libxext6
 
 # Fiying issue: ImportError: libXrender.so.1: cannot open shared object file: No such file or directory
 # https://www.cyberciti.biz/faq/debian-ubuntu-linux-wkhtmltopdf-error-while-loading-shared-libraries-libxrender-so-1/
-RUN apt-get install libfontconfig1 libxrender1
+RUN apt-get install -y libfontconfig1 libxrender1
 
 RUN pip3 install -r requirements/testing_linux_compatible.txt
 
