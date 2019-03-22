@@ -13,3 +13,6 @@ build
 __pycache__/
 *.py[cod]
 *$py.class
+
+# Jupyter checkpoints
+docs/.ipynb_checkpoints
