@@ -14,11 +14,18 @@ This solution is heavily inspired by :
 
 ### Understanding the game state
 
+Character recognition is solved for numbers, please check the [Jupyter Notebook](docs/ocr_by_template_matching.ipynb) in docs, describing the process.
+
+#### Character screen
+
 Running the application will analyse the character tab. It will automatically be opened, taken a screenshot of, and closed, every 3 seconds.
 The screenshot is used for further analysis. Several properties are analysed, like experience and health. Please check the tests for up-to-date info.
 
-Based on the current solution it should be low effort to analyse all interesting properties from this screen.
-This is an experimental behaviour at the moment.
+#### Potions in the belt
+
+To goal is to analyse the current belt, what kind of potions are available on which hotkey.
+
+This is the next target. With some OpenCV filters and current experience it shoudl be doable.
 
 ### Interacting with the game
 
@@ -31,7 +38,7 @@ Q-learning, as a form of reinformcement learning, is planned to be applied to th
 
 Further resources to look into:
 
-- [Mady - Deep Reinforcement learning ](https://medium.com/deep-math-machine-learning-ai/ch-13-deep-reinforcement-learning-deep-q-learning-and-policy-gradients-towards-agi-a2a0b611617e)
+- [Mady - Deep Reinforcement learning](https://medium.com/deep-math-machine-learning-ai/ch-13-deep-reinforcement-learning-deep-q-learning-and-policy-gradients-towards-agi-a2a0b611617e)
 - [Reinforcement Learning: An Introduction](http://web.stanford.edu/class/psych209/Readings/SuttonBartoIPRLBook2ndEd.pdf)
 
 ## Development guide
