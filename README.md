@@ -14,14 +14,19 @@ This solution is heavily inspired by :
 
 ### Understanding the game state
 
-Character recognition is solved for numbers, please check the [Jupyter Notebook](docs/ocr_by_template_matching.ipynb) in docs, describing the process.
+Character recognition is solved for numbers, please check the `docs` folder for Jupyter Notebooks for examples.
+As a primer on computer vision I found the following page helpful: [Image Processing 101](https://codewords.recurse.com/issues/six/image-processing-101)
 
 #### Character screen
+
+[ocr_by_template_matching.ipynb](docs/ocr_by_template_matching.ipynb)
 
 Running the application will analyse the character tab. It will automatically be opened, taken a screenshot of, and closed, every 3 seconds.
 The screenshot is used for further analysis. Several properties are analysed, like experience and health. Please check the tests for up-to-date info.
 
 #### Potions in the belt
+
+[identifying_health_potions.ipynb](docs/ocr_by_template_matching.ipynb)
 
 To goal is to analyse the current belt, what kind of potions are available on which hotkey.
 
