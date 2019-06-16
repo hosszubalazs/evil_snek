@@ -10,6 +10,20 @@ This solution is heavily inspired by :
 - [Python plays Grand Theft Auto V](https://www.youtube.com/watch?v=ks4MPfMq8aQ)
 - [Credit card OCR with OpenCV and Python](https://www.pyimagesearch.com/2017/07/17/credit-card-ocr-with-opencv-and-python/)
 
+## How to use
+
+The project only works on Microsoft Windows operating system. As Diablo is only released for Windows, this should not be an issue.
+
+1. Obtain [Diablo](https://www.gog.com/game/diablo) from GoG
+2. Checkout the repository, activate the virtual environment, install dependencies
+3. Start Diablo in windowed mode. Currently the cropping expects that the window title bar is visible, do not use fullscreen-windowed mode.
+4. Start the app: `python evil_snek\app.py`
+5. Marvel in the beauty..
+
+## Development guide
+
+Please review `azure-pipelines.yml` for an up-to-date requirement of the environment, and steps to setup and test a fresh checkout.
+
 ## Current state
 
 ### Understanding the game state
@@ -45,20 +59,7 @@ Further resources to look into:
 
 - [Mady - Deep Reinforcement learning](https://medium.com/deep-math-machine-learning-ai/ch-13-deep-reinforcement-learning-deep-q-learning-and-policy-gradients-towards-agi-a2a0b611617e)
 - [Reinforcement Learning: An Introduction](http://web.stanford.edu/class/psych209/Readings/SuttonBartoIPRLBook2ndEd.pdf)
-
-## Development guide
-
-Please review `azure-pipelines.yml` for an up-to-date requirement of the environment, and steps to setup and test a fresh checkout.
-
-## User Guide
-
-The project only works on Microsoft Windows operating system. As Diablo is only released for Windows, this should not be an issue.
-
-1. Obtain [Diablo](https://www.gog.com/game/diablo) from GoG
-2. Checkout the repository, activate the virtual environment, install dependencies
-3. Start Diablo in windowed mode. Currently the cropping expects that the window title bar is visible, do not use fullscreen-windowed mode.
-4. Start the app: `python evil_snek\app.py`
-5. Marvel in the beauty..
+- [DeepMind Course on reinforcement learning](https://www.youtube.com/watch?v=2pWv7GOvuf0)
 
 ## Tooling
 
