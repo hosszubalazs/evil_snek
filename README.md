@@ -69,6 +69,7 @@ Further resources to look into:
 - [pywin32](https://pypi.org/project/pywin32/), WIN32 API PostMessage --> Send keyboard and mouse events to the window, simulating user input
 - [Jupyter Notebook describing OCR](docs/ocr_by_template_matching.ipynb): OpenCV Template matching ( with some other image preprocessing) for Optical Character recognition (OCR).
 - [Docker](https://www.docker.com/) --> for automating tests. Linux containers are used.
+- [PyRight](https://github.com/microsoft/pyright) as a VSCode plugin for dev time type-checking.
   
 ## Automating keyboard and mouse messages
 
