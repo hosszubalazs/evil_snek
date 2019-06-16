@@ -16,3 +16,5 @@ __pycache__/
 
 # Jupyter checkpoints
 docs/.ipynb_checkpoints
+
+.mypy_cache
