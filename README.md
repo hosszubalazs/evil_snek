@@ -17,13 +17,13 @@ The project only works on Microsoft Windows operating system. As Diablo is only 
 1. Obtain [Diablo](https://www.gog.com/game/diablo) from GoG
 2. Make sure `python`, `pip`, and `virtualenv` is installed. Latest versions suggested.
 3. Checkout the repository, create and activate the virtual environment, install dependencies : `pip install -r  requirements\requirements.txt`
-4. Start Diablo in windowed mode (800x600 or higher suggested). Currently the cropping expects that the window title bar is visible, do not use fullscreen-windowed mode.
+4. Start Diablo in windowed mode (1440x1050 or higher suggested). Currently the cropping expects that the window title bar is visible, do not use fullscreen-windowed mode.
 5. Start the app: `python evil_snek\app.py`
 6. Marvel in the beauty..
 
 ## Development guide
 
-Please review `azure-pipelines.yml` for an up-to-date requirement of the environment, and steps to setup and test a fresh checkout.
+Automated testing is done in Linux containers. Please review `azure-pipelines.yml` for an up-to-date requirement of the environment, and steps to setup and test a fresh checkout.
 
 ## Current state
 
