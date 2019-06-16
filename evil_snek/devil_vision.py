@@ -8,7 +8,8 @@ import imutils
 
 
 def initialize_window_size(window_parameters):
-    # FIXME the margins only work in 4:3 windowed mode
+    """ FIXME the margins only work in 4:3 windowed mode
+    """
     side_margin = 1
     top_margin = 32
     bottom_margin = 1
@@ -147,41 +148,64 @@ def crop_mana_max(character_tab_screenshot):
     return cropped
 
 
-def analyze_number_from_image(number_to_analyse):
-    # Solution heavily based on : https://www.pyimagesearch.com/2017/07/17/credit-card-ocr-with-opencv-and-python/
+def get_number_from_ocr_location(pixels_from_left):
+    """
+    Magic numbers are determined based on the test picture stored as reference.
+    FIXME this implementation is very ugly, altough works.
+    """
+    if pixels_from_left < 10:
+        return 1
+    elif pixels_from_left < 27:
+        return 2
+    elif pixels_from_left < 40:
+        return 3
+    elif pixels_from_left < 60:
+        return 4
+    elif pixels_from_left < 75:
+        return 5
+    elif pixels_from_left < 90:
+        return 6
+    elif pixels_from_left < 110:
+        return 7
+    elif pixels_from_left < 125:
+        return 8
+    elif pixels_from_left < 140:
+        return 9
+    else:
+        return 0
 
-    reference = cv2.imread(  # "tests/test_data/exocet_digits_vertical.PNG")
-        "tests/test_data/exocet_heavy_digits_reference.PNG")
+
+def analyze_number_from_image(image_to_analyse):
+    """
+    Solution heavily based on : https://www.pyimagesearch.com/2017/07/17/credit-card-ocr-with-opencv-and-python/
+    """
+    reference = cv2.imread("tests/test_data/exocet_heavy_digits_reference.PNG")
     reference = cv2.cvtColor(reference, cv2.COLOR_BGR2GRAY)
 
     # find contours in the image (i.e,. the outlines of the digits)
     # sort them from left to right, and initialize a dictionary to map
     # digit name to the ROI
     numbers_contours = cv2.findContours(
-        number_to_analyse, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        image_to_analyse, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     numbers_contours = imutils.grab_contours(numbers_contours)
     numbers_contours = contours.sort_contours(
         numbers_contours, method="left-to-right")[0]
-
-    # FIXME we need a dynamic solution for this. This is really dirty.
-    alma = {1: "1", 2: "1", 3: "1", 14: "2", 15: "2", 30: "3", 31: "3", 45: "4", 46: "4", 47: "4", 62: "5", 63: "5", 78: "6",
-            79: "6", 93: "7", 94: "7", 95: "7", 110: "8", 111: "8", 112: "8", 128: "9", 143: "0", 144: "0"}
-
-    convert_this_str_to_int = ""
+    string_of_numbers = ""
     for (i, c) in enumerate(numbers_contours):
 
         # compute the bounding box for the digit, extract it, and resize
         (x, y, w, h) = cv2.boundingRect(c)
-        roi = number_to_analyse[y:y + h, x:x + w]
+        roi = image_to_analyse[y:y + h, x:x + w]
         roi = invert_image(roi)
         match = cv2.matchTemplate(reference, roi, cv2.TM_CCORR_NORMED)
 
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(match)
-        #print("min_loc:{}", min_loc)
-        #print("max_loc:{}", max_loc)
-        convert_this_str_to_int += "{}".format(alma[max_loc[0]])
+        pixel_distance_from_left = max_loc[0]
 
-    return int(convert_this_str_to_int)
+        string_of_numbers += "{}".format(
+            get_number_from_ocr_location(pixel_distance_from_left))
+
+    return int(string_of_numbers)
 
 
 def opencv_fun(window_dimensions, temp_data_path):
