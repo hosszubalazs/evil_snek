@@ -12,13 +12,14 @@ This solution is heavily inspired by :
 
 ## How to use
 
-The project only works on Microsoft Windows operating system. As Diablo is only released for Windows, this should not be an issue.
+The project only works on Microsoft Windows operating system. As Diablo is only released for Windows, this is not a new restrictions.
 
 1. Obtain [Diablo](https://www.gog.com/game/diablo) from GoG
-2. Checkout the repository, activate the virtual environment, install dependencies
-3. Start Diablo in windowed mode. Currently the cropping expects that the window title bar is visible, do not use fullscreen-windowed mode.
-4. Start the app: `python evil_snek\app.py`
-5. Marvel in the beauty..
+2. Make sure `python`, `pip`, and `virtualenv` is is installed. Latest versions suggested.
+3. Checkout the repository, create and activate the virtual environment, install dependencies from `requirements.txt`
+4. Start Diablo in windowed mode. Currently the cropping expects that the window title bar is visible, do not use fullscreen-windowed mode.
+5. Start the app: `python evil_snek\app.py`
+6. Marvel in the beauty..
 
 ## Development guide
 
