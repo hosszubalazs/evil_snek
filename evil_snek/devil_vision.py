@@ -8,7 +8,8 @@ import imutils
 
 
 def initialize_window_size(window_parameters):
-    # FIXME the margins only work in 4:3 windowed mode
+    """ FIXME the margins only work in 4:3 windowed mode
+    """
     side_margin = 1
     top_margin = 32
     bottom_margin = 1
@@ -175,8 +176,9 @@ def get_number_from_ocr_location(pixels_from_left):
 
 
 def analyze_number_from_image(image_to_analyse):
-    # Solution heavily based on : https://www.pyimagesearch.com/2017/07/17/credit-card-ocr-with-opencv-and-python/
-
+    """
+    Solution heavily based on : https://www.pyimagesearch.com/2017/07/17/credit-card-ocr-with-opencv-and-python/
+    """
     reference = cv2.imread("tests/test_data/exocet_heavy_digits_reference.PNG")
     reference = cv2.cvtColor(reference, cv2.COLOR_BGR2GRAY)
 
