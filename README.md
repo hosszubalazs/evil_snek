@@ -15,9 +15,9 @@ This solution is heavily inspired by :
 The project only works on Microsoft Windows operating system. As Diablo is only released for Windows, this is not a new restrictions.
 
 1. Obtain [Diablo](https://www.gog.com/game/diablo) from GoG
-2. Make sure `python`, `pip`, and `virtualenv` is is installed. Latest versions suggested.
-3. Checkout the repository, create and activate the virtual environment, install dependencies from `requirements.txt`
-4. Start Diablo in windowed mode. Currently the cropping expects that the window title bar is visible, do not use fullscreen-windowed mode.
+2. Make sure `python`, `pip`, and `virtualenv` is installed. Latest versions suggested.
+3. Checkout the repository, create and activate the virtual environment, install dependencies : `pip install -r  requirements\requirements.txt`
+4. Start Diablo in windowed mode (800x600 or higher suggested). Currently the cropping expects that the window title bar is visible, do not use fullscreen-windowed mode.
 5. Start the app: `python evil_snek\app.py`
 6. Marvel in the beauty..
 
