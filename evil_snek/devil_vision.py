@@ -146,10 +146,12 @@ def crop_mana_max(character_tab_screenshot):
 
     return cropped
 
-# FIXME this is bad
 
-# Magic numbers are determined based on the test picture stored as reference.
-def get_number_from_OCR_location(pixels_from_left):
+def get_number_from_ocr_location(pixels_from_left):
+    """
+    Magic numbers are determined based on the test picture stored as reference.
+    FIXME this implementation is very ugly, altough works.
+    """
     if pixels_from_left < 10:
         return 1
     elif pixels_from_left < 27:
@@ -199,7 +201,7 @@ def analyze_number_from_image(image_to_analyse):
         pixel_distance_from_left = max_loc[0]
 
         string_of_numbers += "{}".format(
-            get_number_from_OCR_location(pixel_distance_from_left))
+            get_number_from_ocr_location(pixel_distance_from_left))
 
     return int(string_of_numbers)
 
