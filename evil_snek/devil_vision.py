@@ -148,7 +148,7 @@ def crop_mana_max(character_tab_screenshot):
     return cropped
 
 
-def get_number_from_ocr_location(pixels_from_left):
+def get_number_from_ocr_location(pixels_from_left: int) -> int:
     """
     Magic numbers are determined based on the test picture stored as reference.
     FIXME this implementation is very ugly, altough works.
@@ -224,6 +224,8 @@ def opencv_fun(window_dimensions, temp_data_path):
 
         frame_difference = canny_on_hue - previous_frame
         time_diff = (time.time() - last_time)
+
+        fps = 0
         if time_diff > 0:
             fps = format(1 / time_diff, '.2f')
             # print("fps:", fps)

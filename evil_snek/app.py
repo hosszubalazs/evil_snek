@@ -5,10 +5,10 @@ import sys
 import threading
 
 # Needed to check for proper 32bit Python distribution
-import ctypes
+from ctypes import c_voidp, sizeof
 
-import fake_ui
-import devil_vision
+from evil_snek import fake_ui
+from evil_snek import devil_vision
 import os
 
 # WIN32 Window Handler, not yet initialized
@@ -16,11 +16,11 @@ WHND = 0
 
 # For debugging purposes we are creating throwaway screenshots when the app is runnig.
 # Keep this path up-to-date with .gitignore.
-TEMP_DATA_PATH = "temp_data"
+TEMP_DATA_PATH: str = "temp_data"
 LOG_FILE_NAME = "character_log.csv"
 
 
-def create_folder(folder_path):
+def create_folder(folder_path: str) -> None:
     try:
         os.mkdir(folder_path)
     except OSError:
@@ -64,6 +64,7 @@ def report_current_xp(diablo_window_dimensions):
             TEMP_DATA_PATH, "character_screen_captured.png", character_tab_screenshot)
 
         # FIXME Too much duplication, please clean up.
+        # Probably I could map-reduce it
 
         # XP
         img_of_xp = devil_vision.crop_xp(character_tab_screenshot)
@@ -106,7 +107,7 @@ def report_current_xp(diablo_window_dimensions):
 
 
 if __name__ == '__main__':
-    if ctypes.sizeof(ctypes.c_voidp) == 8:
+    if sizeof(c_voidp) == 8:
         sys.exit("64 bit Python detected, stopping. Please use a 32bit Python distribution, this is a requirement for win32 api.")
 
     WHND, rect = fake_ui.initalize_window_handler()

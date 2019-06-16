@@ -29,29 +29,28 @@ opencv_quests_coordinates = int('00000001100000110000000000011111', 2)
 opencv_chartab_coordinates = int('00000001011100110000000000011111', 2)
 
 
-def initalize_window_handler(window_title='DIABLO'):
+def initalize_window_handler(window_title: str = 'DIABLO'):
     WHND = win32gui.FindWindowEx(None, None, None, window_title)
     if WHND == 0:
         sys.exit("Diablo was not found. Please makes sure Diablo is running, and you are running this program with sufficient rights.")
-
+    window_size = [0, 0, 0, 0]
     try:
         f = ctypes.windll.dwmapi.DwmGetWindowAttribute
     except WindowsError:
         f = None
+
     if f:  # Vista & 7 stuff
-        rect = ctypes.wintypes.RECT()
+        window_size = ctypes.wintypes.RECT()
         DWMWA_EXTENDED_FRAME_BOUNDS = 9
         f(WHND,
           ctypes.wintypes.DWORD(DWMWA_EXTENDED_FRAME_BOUNDS),
-          ctypes.byref(rect),
-          ctypes.sizeof(rect)
+          ctypes.byref(window_size),
+          ctypes.sizeof(window_size)
           )
     else:
         print(" Getting the size of the window was unsuccessful :( :(")
 
-    print("source")
-    print(rect)
-    return WHND, rect
+    return WHND, window_size
 
 
 def press_button(whnd, virtual_key, scan_code):
