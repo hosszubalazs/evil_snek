@@ -36,12 +36,15 @@ Descriptors = Descriptor("xp", 470/1400, 190/1400, 125/1050), \
     Descriptor("mana", 142/640, 35/640, 700/1050, bw_and_normalize), \
     Descriptor("mana_max", 205/1400, 70/1400, 700/1050)
 
-def get_property_by_name( target_name: str):
+
+def get_property_by_name(target_name: str):
     """This is a very poor solution, used for testing"""
     for property in Descriptors:
         if property.name == target_name:
             return property
     return 0
+
+
 def get_property(screenshot, property: Descriptor):
     cropped_image = screenshot_cropper.custom_cropper(
         screenshot, property.xstart, property.xsize, property.ystart)
