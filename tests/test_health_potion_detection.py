@@ -21,6 +21,7 @@ def test_health_potion_detection_1440_1():
     screenshot = cv2.imread(TEST_DATA_PATH+file_name)
 
     image_of_belt = devil_vision.crop_belt(screenshot)
+    cv2.imwrite("belt.png", image_of_belt)
     actual = devil_vision.get_health_in_belt(image_of_belt)
 
     assert actual == expected
