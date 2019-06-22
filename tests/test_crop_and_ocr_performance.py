@@ -31,6 +31,7 @@ def test_crop_ocr_xp_1440_0_perf():
     testing_time_s = time.time() - start
     # Tested time is discovered based on actual performance
     # The goal is to keep it limited, maybe see improvements in the future
-    reference_time_s = 0.70
-    max_allowed_deviation_s = 0.04
+    reference_time_s = 0.7
+    # A big margin is needed because the test is run in very different environemnts ( both locally and in the cloud)
+    max_allowed_deviation_s = 0.2
     assert abs(reference_time_s - testing_time_s) < max_allowed_deviation_s
