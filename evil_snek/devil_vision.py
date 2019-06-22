@@ -5,6 +5,73 @@ import time
 import numpy
 from imutils import contours
 import imutils
+import screenshot_cropper
+
+class Property:
+    """
+    FIXME a class might be too heavywieght for this data structure.
+    Consider a named tuple: https://docs.python.org/3.7/library/collections.html#collections.namedtuple
+    """
+    def __init__(self, name: str, xstart: float, xsize: float, ystart: float, post_processor=0):
+        self.name = name
+        self.xstart = xstart
+        self.xsize = xsize
+        self.ystart = ystart
+        self.post_processor = post_processor
+
+
+Properties = Property("xp", 470/1400, 190/1400, 125/1050), \
+             Property("nextlvl_xp", 470/1400, 190/1400, 185/1050), \
+             Property("gold", 470/1400, 190/1400, 295/1050)
+
+
+def get_property(screenshot, property_name: str):
+    cropped_image, custom_processor = get_cropped_and_processed_property(
+        screenshot, property_name)
+    #cv2.imwrite("cropped.png", cropped_image)
+    post_processed_image = post_process_property_screenshot(
+        cropped_image, custom_processor)
+    #cv2.imwrite("peepeed.png", post_processed_image)
+
+    return analyze_number_from_image(post_processed_image)
+
+
+def get_cropped_and_processed_property(screenshot, property_name: str):
+    cropped_image = 0
+    custom_post_processing = 0
+    # FIXME : this complicated if structure is really not nice. devil_vision should support more dynamic picture cutting.
+    if property_name == "xp":
+        cropped_image = screenshot_cropper.crop_xp(screenshot)
+    elif property_name == "nextlvl_xp":
+        cropped_image = screenshot_cropper.crop_nextlvl_xp(screenshot)
+    elif property_name == "gold":
+        cropped_image = screenshot_cropper.crop_gold(screenshot)
+    elif property_name == "hp":
+        cropped_image = screenshot_cropper.crop_hp(screenshot)
+        custom_post_processing = bw_and_normalize
+    elif property_name == "hp_max":
+        cropped_image = screenshot_cropper.crop_hp_max(screenshot)
+    elif property_name == "mana":
+        cropped_image = screenshot_cropper.crop_mana(screenshot)
+        custom_post_processing = bw_and_normalize
+    elif property_name == "mana_max":
+        cropped_image = screenshot_cropper.crop_mana_max(screenshot)
+
+    return cropped_image, custom_post_processing
+
+
+def post_process_property_screenshot(property_screenshot, post_processing_func=0):
+    final = 0
+
+    # Some cases, like the health points which can be colored, require special processing.
+    # This if makes that possible, while still providing a strong default flow.
+    if post_processing_func != 0:
+        final = post_processing_func(property_screenshot)
+    else:
+        thresholded = threshold_chracter_text(property_screenshot)
+        final = cv2.cvtColor(thresholded, cv2.COLOR_BGR2GRAY)
+
+    return final
 
 
 def initialize_window_size(window_parameters):
@@ -51,101 +118,6 @@ def bw_and_normalize(image):
     grayed = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     normalized = cv2.normalize(grayed, grayed, 0, 255, cv2.NORM_MINMAX)
     return threshold_chracter_text(normalized)
-
-
-def crop_and_grayfi_property(character_tab_screenshot, x_start_rel, x_size_rel, y_start_rel, post_processing=0):
-    height = character_tab_screenshot.shape[0]
-    width = character_tab_screenshot.shape[1]
-    x_start_abs = int(x_start_rel * width)
-    x_size_abs = int(x_size_rel * width)
-    y_start_abs = int(y_start_rel * height)
-    y_size_abs = int(30/1050 * height)
-    cropped = character_tab_screenshot[y_start_abs:y_start_abs +
-                                       y_size_abs, x_start_abs:x_start_abs+x_size_abs]
-
-    final = 0
-
-    # Some cases, like the health points which can be colored, require special processing.
-    # This if makes that possible, while still providing a strong default flow.
-    if post_processing != 0:
-        final = post_processing(cropped)
-    else:
-        thresholded = threshold_chracter_text(cropped)
-        final = cv2.cvtColor(thresholded, cv2.COLOR_BGR2GRAY)
-
-    return final
-
-
-def crop_xp(character_tab_screenshot):
-    x_start = 470/1400
-    x_size = 190/1400
-    y_start = 125/1050
-
-    return crop_and_grayfi_property(character_tab_screenshot, x_start, x_size, y_start)
-
-
-def crop_nextlvl_xp(character_tab_screenshot):
-    x_start = 470/1400
-    x_size = 190/1400
-    y_start = 185/1050
-
-    return crop_and_grayfi_property(character_tab_screenshot, x_start, x_size, y_start)
-
-
-def crop_gold(character_tab_screenshot):
-    x_start = 470/1400
-    x_size = 190/1400
-    y_start = 295/1050
-
-    return crop_and_grayfi_property(character_tab_screenshot, x_start, x_size, y_start)
-
-
-def crop_hp(character_tab_screenshot):
-    x_start = 142/640
-    x_size = 35/640
-    y_start = 293/480
-
-    # since the health and mana points can be colored, normalization will be needed before thresholding
-    # this is solved by an extra helper function
-    cropped = crop_and_grayfi_property(
-        character_tab_screenshot, x_start, x_size, y_start, bw_and_normalize)
-
-    return cropped
-
-
-def crop_hp_max(character_tab_screenshot):
-    x_start = 205/1400
-    x_size = 70/1400
-    y_start = 293/480
-
-    cropped = crop_and_grayfi_property(
-        character_tab_screenshot, x_start, x_size, y_start)
-
-    return cropped
-
-
-def crop_mana(character_tab_screenshot):
-    x_start = 142/640
-    x_size = 35/640
-    y_start = 700/1050
-
-    # since the health and mana points can be colored, normalization will be needed before thresholding
-    # this is solved by an extra helper function
-    cropped = crop_and_grayfi_property(
-        character_tab_screenshot, x_start, x_size, y_start, bw_and_normalize)
-
-    return cropped
-
-
-def crop_mana_max(character_tab_screenshot):
-    x_start = 205/1400
-    x_size = 70/1400
-    y_start = 700/1050
-
-    cropped = crop_and_grayfi_property(
-        character_tab_screenshot, x_start, x_size, y_start)
-
-    return cropped
 
 
 def get_number_from_ocr_location(pixels_from_left: int) -> int:

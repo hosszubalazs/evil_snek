@@ -7,8 +7,8 @@ import threading
 # Needed to check for proper 32bit Python distribution
 from ctypes import c_voidp, sizeof
 
-from evil_snek import fake_ui
-from evil_snek import devil_vision
+import fake_ui
+import devil_vision
 import os
 
 # WIN32 Window Handler, not yet initialized
@@ -17,7 +17,7 @@ WHND = 0
 # For debugging purposes we are creating throwaway screenshots when the app is runnig.
 # Keep this path up-to-date with .gitignore.
 TEMP_DATA_PATH: str = "temp_data"
-LOG_FILE_NAME = "character_log.csv"
+LOG_FILE_NAME: str = "character_log.csv"
 
 
 def create_folder(folder_path: str) -> None:
@@ -29,7 +29,7 @@ def create_folder(folder_path: str) -> None:
         print("Successfully created the directory %s " % folder_path)
 
 
-def report_current_xp(diablo_window_dimensions):
+def report_character_properties(diablo_window_dimensions):
 
     # time.sleep(3)
     create_folder(TEMP_DATA_PATH)
@@ -67,33 +67,28 @@ def report_current_xp(diablo_window_dimensions):
         # Probably I could map-reduce it
 
         # XP
-        img_of_xp = devil_vision.crop_xp(character_tab_screenshot)
-        xp = devil_vision.analyze_number_from_image(img_of_xp)
+        xp = devil_vision.get_property(character_tab_screenshot, "xp")
 
         # XP needed for next level
-        img_of_nextlvl_xp = devil_vision.crop_nextlvl_xp(
-            character_tab_screenshot)
-        nextlvl_xp = devil_vision.analyze_number_from_image(img_of_nextlvl_xp)
+        nextlvl_xp = devil_vision.get_property(
+            character_tab_screenshot, "nextlvl_xp")
 
         # GOLD
-        img_of_gold = devil_vision.crop_gold(character_tab_screenshot)
-        gold = devil_vision.analyze_number_from_image(img_of_gold)
+        gold = devil_vision.get_property(
+            character_tab_screenshot, "gold")
 
         # HP
-        img = devil_vision.crop_hp(character_tab_screenshot)
-        hp = devil_vision.analyze_number_from_image(img)
+        hp = devil_vision.get_property(character_tab_screenshot, "hp")
 
         # HP MAX
-        img = devil_vision.crop_hp_max(character_tab_screenshot)
-        hp_max = devil_vision.analyze_number_from_image(img)
+        hp_max = devil_vision.get_property(character_tab_screenshot, "hp_max")
 
         # Mana
-        img = devil_vision.crop_mana(character_tab_screenshot)
-        mana = devil_vision.analyze_number_from_image(img)
+        mana = devil_vision.get_property(character_tab_screenshot, "mana")
 
         # Mana MAX
-        img = devil_vision.crop_mana_max(character_tab_screenshot)
-        mana_max = devil_vision.analyze_number_from_image(img)
+        mana_max = devil_vision.get_property(
+            character_tab_screenshot, "mana_max")
 
         # Logging
         log_line = '{},{},{},{},{},{},{},{}'.format(
@@ -114,7 +109,7 @@ if __name__ == '__main__':
     diablo_window_dimensions = devil_vision.initialize_window_size(rect)
 
     xp_thread = threading.Thread(
-        target=report_current_xp, args=(diablo_window_dimensions,))
+        target=report_character_properties, args=(diablo_window_dimensions,))
     xp_thread.daemon = True
     xp_thread.start()
 
