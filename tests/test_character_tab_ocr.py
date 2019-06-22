@@ -12,8 +12,9 @@ test_chracter_sheet_1 = cv2.imread(
 
 
 def character_tab_test_helper(test_chracter_sheet, property_name: str, expected_value: int):
+    prop = devil_vision.get_property_by_name(property_name)
     actual_value = devil_vision.get_property(
-        test_chracter_sheet, property_name)
+        test_chracter_sheet, prop)
     assert actual_value == expected_value
 
 
