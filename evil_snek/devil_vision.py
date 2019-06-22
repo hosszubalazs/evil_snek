@@ -7,11 +7,13 @@ from imutils import contours
 import imutils
 import screenshot_cropper
 
+
 class Property:
     """
     FIXME a class might be too heavywieght for this data structure.
     Consider a named tuple: https://docs.python.org/3.7/library/collections.html#collections.namedtuple
     """
+
     def __init__(self, name: str, xstart: float, xsize: float, ystart: float, post_processor=0):
         self.name = name
         self.xstart = xstart
@@ -20,9 +22,20 @@ class Property:
         self.post_processor = post_processor
 
 
+def bw_and_normalize(image):
+    grayed = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    normalized = cv2.normalize(grayed, grayed, 0, 255, cv2.NORM_MINMAX)
+    return threshold_chracter_text(normalized)
+
+
 Properties = Property("xp", 470/1400, 190/1400, 125/1050), \
-             Property("nextlvl_xp", 470/1400, 190/1400, 185/1050), \
-             Property("gold", 470/1400, 190/1400, 295/1050)
+    Property("nextlvl_xp", 470/1400, 190/1400, 185/1050), \
+    Property("gold", 470/1400, 190/1400, 295/1050), \
+    Property("hp", 142/640, 35/640, 293/480, bw_and_normalize), \
+    Property("hp_max", 205/1400, 70/1400, 293/480), \
+    Property("mana", 142/640, 35/640, 700/1050, bw_and_normalize), \
+    Property("mana_max", 205/1400, 70/1400, 700/1050)
+
 
 
 def get_property(screenshot, property_name: str):
@@ -112,12 +125,6 @@ def threshold_chracter_text(image):
     ret, thresh2 = cv2.threshold(thresh1, 100, 255, cv2.THRESH_BINARY)
 
     return thresh2
-
-
-def bw_and_normalize(image):
-    grayed = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    normalized = cv2.normalize(grayed, grayed, 0, 255, cv2.NORM_MINMAX)
-    return threshold_chracter_text(normalized)
 
 
 def get_number_from_ocr_location(pixels_from_left: int) -> int:

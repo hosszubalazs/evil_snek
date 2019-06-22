@@ -31,7 +31,6 @@ def create_folder(folder_path: str) -> None:
 
 def report_character_properties(diablo_window_dimensions):
 
-    # time.sleep(3)
     create_folder(TEMP_DATA_PATH)
     # Removing previous file, starting from a clean slate
     # Structure might have changed since last run.
@@ -42,7 +41,10 @@ def report_character_properties(diablo_window_dimensions):
     else:
         print("Previous CSV file removed.")
 
-    log_header = 'timestamp,xp,nextlvl_xp,gold,hp,hp_max,mana,mana_max'
+    log_header = 'timestamp'
+    for property in devil_vision.Properties:
+        log_header += "," + property.name 
+
     print(log_header)
     with open(TEMP_DATA_PATH + '/' + LOG_FILE_NAME, 'a') as xp_csv:
         xp_csv.write(log_header + '\n')
@@ -63,36 +65,12 @@ def report_character_properties(diablo_window_dimensions):
         devil_vision.save_image(
             TEMP_DATA_PATH, "character_screen_captured.png", character_tab_screenshot)
 
-        # FIXME Too much duplication, please clean up.
-        # Probably I could map-reduce it
+        log_line = '{}'.format(time.time())
+        for property in devil_vision.Properties:
+            property_value = devil_vision.get_property(
+                character_tab_screenshot, property.name)
+            log_line = '{},{}'.format(log_line, property_value)
 
-        # XP
-        xp = devil_vision.get_property(character_tab_screenshot, "xp")
-
-        # XP needed for next level
-        nextlvl_xp = devil_vision.get_property(
-            character_tab_screenshot, "nextlvl_xp")
-
-        # GOLD
-        gold = devil_vision.get_property(
-            character_tab_screenshot, "gold")
-
-        # HP
-        hp = devil_vision.get_property(character_tab_screenshot, "hp")
-
-        # HP MAX
-        hp_max = devil_vision.get_property(character_tab_screenshot, "hp_max")
-
-        # Mana
-        mana = devil_vision.get_property(character_tab_screenshot, "mana")
-
-        # Mana MAX
-        mana_max = devil_vision.get_property(
-            character_tab_screenshot, "mana_max")
-
-        # Logging
-        log_line = '{},{},{},{},{},{},{},{}'.format(
-            time.time(), xp, nextlvl_xp, gold, hp, hp_max, mana, mana_max)
         print(log_line)
         with open(TEMP_DATA_PATH + '/' + LOG_FILE_NAME, 'a') as xp_csv:
             xp_csv.write(log_line + '\n')
