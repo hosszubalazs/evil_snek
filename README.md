@@ -11,8 +11,20 @@ This solution is heavily inspired by :
 - [Python plays Grand Theft Auto V](https://www.youtube.com/watch?v=ks4MPfMq8aQ)
 - [Credit card OCR with OpenCV and Python](https://www.pyimagesearch.com/2017/07/17/credit-card-ocr-with-opencv-and-python/)
 
-Extra resource to check:
-- [The Brood War API](https://bwapi.github.io/)
+## How to use
+
+The project only works on Microsoft Windows operating system. As Diablo is only released for Windows, this is not a new restrictions.
+
+1. Obtain [Diablo](https://www.gog.com/game/diablo) from GoG
+2. Make sure `python`, `pip`, and `virtualenv` is installed. Latest versions suggested.
+3. Checkout the repository, create and activate the virtual environment, install dependencies : `pip install -r  requirements\requirements.txt`
+4. Start Diablo in windowed mode (1440x1050 or higher suggested). Currently the cropping expects that the window title bar is visible, do not use fullscreen-windowed mode.
+5. Start the app: `python evil_snek\app.py`
+6. Marvel in the beauty..
+
+## Development guide
+
+Automated testing is done in Linux containers. Please review `azure-pipelines.yml` for an up-to-date requirement of the environment, and steps to setup and test a fresh checkout.
 
 ## Current state
 
@@ -51,20 +63,7 @@ Further resources to look into:
 
 - [Mady - Deep Reinforcement learning](https://medium.com/deep-math-machine-learning-ai/ch-13-deep-reinforcement-learning-deep-q-learning-and-policy-gradients-towards-agi-a2a0b611617e)
 - [Reinforcement Learning: An Introduction](http://web.stanford.edu/class/psych209/Readings/SuttonBartoIPRLBook2ndEd.pdf)
-
-## Development guide
-
-Please review `azure-pipelines.yml` for an up-to-date requirement of the environment, and steps to setup and test a fresh checkout.
-
-## User Guide
-
-The project only works on Microsoft Windows operating system. As Diablo is only released for Windows, this should not be an issue.
-
-1. Obtain [Diablo](https://www.gog.com/game/diablo) from GoG
-2. Checkout the repository, activate the virtual environment, install dependencies
-3. Start Diablo in windowed mode. Currently the cropping expects that the window title bar is visible, do not use fullscreen-windowed mode.
-4. Start the app: `python evil_snek\app.py`
-5. Marvel in the beauty..
+- [DeepMind Course on reinforcement learning](https://www.youtube.com/watch?v=2pWv7GOvuf0)
 
 ## Tooling
 
@@ -73,7 +72,9 @@ The project only works on Microsoft Windows operating system. As Diablo is only 
 - [pywin32](https://pypi.org/project/pywin32/), WIN32 API PostMessage --> Send keyboard and mouse events to the window, simulating user input
 - [Jupyter Notebook describing OCR](docs/ocr_by_template_matching.ipynb): OpenCV Template matching ( with some other image preprocessing) for Optical Character recognition (OCR).
 - [Docker](https://www.docker.com/) --> for automating tests. Linux containers are used.
-  
+- [PyRight](https://github.com/microsoft/pyright) as a VSCode plugin for dev time type-checking.
+Extra resource to check:
+- [The Brood War API](https://bwapi.github.io/)  
 ## Automating keyboard and mouse messages
 
 Automating the UI events to Diablo, a DirectX game, was challenging, altough looking back it is pretty simple. Instead of spending hours googling for partially working solutions I suggest the analytical approach. There is a neat tool called Spy++, distributed as a tool of Visual Studio, to watch the window of Diablo and log the messages that it receives. The proper events, both for keyboard and mouse actions, will be nicely logged. MSDN documentation will help to understand what are all those parameters for the messages. The resulting code might not be super nice, but it will work.
