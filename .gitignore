@@ -18,3 +18,9 @@ __pycache__/
 docs/.ipynb_checkpoints
 
 .mypy_cache
+
+
+.pytest_cache
+
+.tox
+evil_snek.egg-info
