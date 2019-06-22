@@ -17,7 +17,8 @@ WHND = 0
 # For debugging purposes we are creating throwaway screenshots when the app is runnig.
 # Keep this path up-to-date with .gitignore.
 TEMP_DATA_PATH: str = "temp_data"
-LOG_FILE_NAME: str = "character_log.csv"
+CHAR_LOG_FILE_NAME: str = "character_log.csv"
+BELT_LOG_FILE_NAME: str = "belt.csv"
 
 
 def create_folder(folder_path: str) -> None:
@@ -35,7 +36,7 @@ def report_character_properties(diablo_window_dimensions):
     # Removing previous file, starting from a clean slate
     # Structure might have changed since last run.
     try:
-        os.remove(TEMP_DATA_PATH + '/' + LOG_FILE_NAME)
+        os.remove(TEMP_DATA_PATH + '/' + CHAR_LOG_FILE_NAME)
     except OSError:
         print("Previous CSV file could not be removed, probably does not exist.")
     else:
@@ -43,10 +44,10 @@ def report_character_properties(diablo_window_dimensions):
 
     log_header = 'timestamp'
     for descriptor in devil_vision.Descriptors:
-        log_header += "," + descriptor.name 
+        log_header += "," + descriptor.name
 
     print(log_header)
-    with open(TEMP_DATA_PATH + '/' + LOG_FILE_NAME, 'a') as xp_csv:
+    with open(TEMP_DATA_PATH + '/' + CHAR_LOG_FILE_NAME, 'a') as xp_csv:
         xp_csv.write(log_header + '\n')
     while 1:
         # 1. openCv -> Cut part of the image
@@ -71,9 +72,33 @@ def report_character_properties(diablo_window_dimensions):
                 character_tab_screenshot, descriptor)
             log_line = '{},{}'.format(log_line, property_value)
 
-        print(log_line)
-        with open(TEMP_DATA_PATH + '/' + LOG_FILE_NAME, 'a') as xp_csv:
+        print("char:{}", log_line)
+        with open(TEMP_DATA_PATH + '/' + CHAR_LOG_FILE_NAME, 'a') as xp_csv:
             xp_csv.write(log_line + '\n')
+
+        # Let's do periodic checks on how the value is changing.
+        time.sleep(3)
+
+
+def report_belt(diablo_window_dimensions):
+    create_folder(TEMP_DATA_PATH)
+    # Removing previous file, starting from a clean slate
+    # Structure might have changed since last run.
+    try:
+        os.remove(TEMP_DATA_PATH + '/' + BELT_LOG_FILE_NAME)
+    except OSError:
+        print("Previous CSV file could not be removed, probably does not exist.")
+    else:
+        print("Previous CSV file removed.")
+
+    while 1:
+        screenshot = devil_vision.take_screenshot(diablo_window_dimensions)
+        image_of_belt = devil_vision.crop_belt(screenshot)
+        belt_contents = devil_vision.get_health_in_belt(image_of_belt)
+
+        print("belt:{}", belt_contents)
+        with open(TEMP_DATA_PATH + '/' + BELT_LOG_FILE_NAME, 'a') as belt_csv:
+            belt_csv.write('{}\n'.format(belt_contents))
 
         # Let's do periodic checks on how the value is changing.
         time.sleep(3)
@@ -90,5 +115,10 @@ if __name__ == '__main__':
         target=report_character_properties, args=(diablo_window_dimensions,))
     xp_thread.daemon = True
     xp_thread.start()
+
+    belt_thread = threading.Thread(
+        target=report_belt, args=(diablo_window_dimensions,))
+    belt_thread.daemon = True
+    belt_thread.start()
 
     devil_vision.opencv_fun(diablo_window_dimensions, TEMP_DATA_PATH)

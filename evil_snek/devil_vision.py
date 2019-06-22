@@ -136,6 +136,7 @@ def get_number_from_ocr_location(pixels_from_left: int) -> int:
     else:
         return 0
 
+
 def crop_belt(screenshot):
     width = screenshot.shape[1]
     height = screenshot.shape[0]
@@ -159,19 +160,20 @@ def get_health_in_belt(belt_screenshot):
     potions_in_belt = []
     height_of_item = belt_screenshot.shape[0]
     width_of_item = int(belt_screenshot.shape[1] / 8)
-    print("height: {}", height_of_item)
-    print("width? {}", width_of_item)
+    #print("height: {}", height_of_item)
+    #print("width? {}", width_of_item)
     for i in range(0, 8):
         image_of_slot = belt_screenshot[0:height_of_item, i *
                                         width_of_item:i*width_of_item+width_of_item]
         #cv2.imwrite("slot{}.png".format(i), image_of_slot)
 
         # This is green-red-blue encoding
+        image_of_slot = cv2.cvtColor(image_of_slot, cv2.COLOR_BGRA2RGB)
         red_filtered_slot = cv2.inRange(
-            image_of_slot, (0, 0, 0), (30, 30, 255))
+            image_of_slot, (0, 0, 0), (255, 10, 10))
         #cv2.imwrite("redfiltered{}.png".format(i), red_filtered_slot)
         total_information = cv2.countNonZero(red_filtered_slot)
-        print("total information:{}", total_information)
+        #print("total information:{}", total_information)
         if total_information > 650:
             potions_in_belt.append(2)
         elif total_information > 420:
