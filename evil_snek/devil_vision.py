@@ -5,10 +5,74 @@ import time
 import numpy
 from imutils import contours
 import imutils
+import screenshot_cropper
+
+
+class Descriptor:
+    """
+    FIXME a class might be too heavywieght for this data structure.
+    Consider a named tuple: https://docs.python.org/3.7/library/collections.html#collections.namedtuple
+    """
+
+    def __init__(self, name: str, xstart: float, xsize: float, ystart: float, post_processor=0):
+        self.name = name
+        self.xstart = xstart
+        self.xsize = xsize
+        self.ystart = ystart
+        self.post_processor = post_processor
+
+
+def bw_and_normalize(image):
+    grayed = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    normalized = cv2.normalize(grayed, grayed, 0, 255, cv2.NORM_MINMAX)
+    return threshold_chracter_text(normalized)
+
+
+Descriptors = Descriptor("xp", 470/1400, 190/1400, 125/1050), \
+    Descriptor("nextlvl_xp", 470/1400, 190/1400, 185/1050), \
+    Descriptor("gold", 470/1400, 190/1400, 295/1050), \
+    Descriptor("hp", 142/640, 35/640, 293/480, bw_and_normalize), \
+    Descriptor("hp_max", 205/1400, 70/1400, 293/480), \
+    Descriptor("mana", 142/640, 35/640, 700/1050, bw_and_normalize), \
+    Descriptor("mana_max", 205/1400, 70/1400, 700/1050)
+
+
+def get_property_by_name(target_name: str):
+    """This is a very poor solution, used for testing"""
+    for property in Descriptors:
+        if property.name == target_name:
+            return property
+    return 0
+
+
+def get_property(screenshot, property: Descriptor):
+    cropped_image = screenshot_cropper.custom_cropper(
+        screenshot, property.xstart, property.xsize, property.ystart)
+    #cv2.imwrite("cropped.png", cropped_image)
+    post_processed_image = post_process_property_screenshot(
+        cropped_image, property.post_processor)
+    #cv2.imwrite("peepeed.png", post_processed_image)
+
+    return analyze_number_from_image(post_processed_image)
+
+
+def post_process_property_screenshot(property_screenshot, post_processing_func=0):
+    final = 0
+
+    # Some cases, like the health points which can be colored, require special processing.
+    # This if makes that possible, while still providing a strong default flow.
+    if post_processing_func != 0:
+        final = post_processing_func(property_screenshot)
+    else:
+        thresholded = threshold_chracter_text(property_screenshot)
+        final = cv2.cvtColor(thresholded, cv2.COLOR_BGR2GRAY)
+
+    return final
 
 
 def initialize_window_size(window_parameters):
-    # FIXME the margins only work in 4:3 windowed mode
+    """ FIXME the margins only work in 4:3 windowed mode
+    """
     side_margin = 1
     top_margin = 32
     bottom_margin = 1
@@ -46,34 +110,31 @@ def threshold_chracter_text(image):
     return thresh2
 
 
-def bw_and_normalize(image):
-    grayed = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    normalized = cv2.normalize(grayed, grayed, 0, 255, cv2.NORM_MINMAX)
-    return threshold_chracter_text(normalized)
-
-
-def crop_and_grayfi_property(character_tab_screenshot, x_start_rel, x_size_rel, y_start_rel, post_processing=0):
-    height = character_tab_screenshot.shape[0]
-    width = character_tab_screenshot.shape[1]
-    x_start_abs = int(x_start_rel * width)
-    x_size_abs = int(x_size_rel * width)
-    y_start_abs = int(y_start_rel * height)
-    y_size_abs = int(30/1050 * height)
-    cropped = character_tab_screenshot[y_start_abs:y_start_abs +
-                                       y_size_abs, x_start_abs:x_start_abs+x_size_abs]
-
-    final = 0
-
-    # Some cases, like the health points which can be colored, require special processing.
-    # This if makes that possible, while still providing a strong default flow.
-    if post_processing != 0:
-        final = post_processing(cropped)
+def get_number_from_ocr_location(pixels_from_left: int) -> int:
+    """
+    Magic numbers are determined based on the test picture stored as reference.
+    FIXME this implementation is very ugly, altough works.
+    """
+    if pixels_from_left < 10:
+        return 1
+    elif pixels_from_left < 27:
+        return 2
+    elif pixels_from_left < 40:
+        return 3
+    elif pixels_from_left < 60:
+        return 4
+    elif pixels_from_left < 75:
+        return 5
+    elif pixels_from_left < 90:
+        return 6
+    elif pixels_from_left < 110:
+        return 7
+    elif pixels_from_left < 125:
+        return 8
+    elif pixels_from_left < 140:
+        return 9
     else:
-        thresholded = threshold_chracter_text(cropped)
-        final = cv2.cvtColor(thresholded, cv2.COLOR_BGR2GRAY)
-
-    return final
-
+        return 0
 
 def crop_belt(screenshot):
     width = screenshot.shape[1]
@@ -120,113 +181,37 @@ def get_health_in_belt(belt_screenshot):
     return potions_in_belt
 
 
-def crop_xp(character_tab_screenshot):
-    x_start = 470/1400
-    x_size = 190/1400
-    y_start = 125/1050
-
-    return crop_and_grayfi_property(character_tab_screenshot, x_start, x_size, y_start)
-
-
-def crop_nextlvl_xp(character_tab_screenshot):
-    x_start = 470/1400
-    x_size = 190/1400
-    y_start = 185/1050
-
-    return crop_and_grayfi_property(character_tab_screenshot, x_start, x_size, y_start)
-
-
-def crop_gold(character_tab_screenshot):
-    x_start = 470/1400
-    x_size = 190/1400
-    y_start = 295/1050
-
-    return crop_and_grayfi_property(character_tab_screenshot, x_start, x_size, y_start)
-
-
-def crop_hp(character_tab_screenshot):
-    x_start = 142/640
-    x_size = 35/640
-    y_start = 293/480
-
-    # since the health and mana points can be colored, normalization will be needed before thresholding
-    # this is solved by an extra helper function
-    cropped = crop_and_grayfi_property(
-        character_tab_screenshot, x_start, x_size, y_start, bw_and_normalize)
-
-    return cropped
-
-
-def crop_hp_max(character_tab_screenshot):
-    x_start = 205/1400
-    x_size = 70/1400
-    y_start = 293/480
-
-    cropped = crop_and_grayfi_property(
-        character_tab_screenshot, x_start, x_size, y_start)
-
-    return cropped
-
-
-def crop_mana(character_tab_screenshot):
-    x_start = 142/640
-    x_size = 35/640
-    y_start = 700/1050
-
-    # since the health and mana points can be colored, normalization will be needed before thresholding
-    # this is solved by an extra helper function
-    cropped = crop_and_grayfi_property(
-        character_tab_screenshot, x_start, x_size, y_start, bw_and_normalize)
-
-    return cropped
-
-
-def crop_mana_max(character_tab_screenshot):
-    x_start = 205/1400
-    x_size = 70/1400
-    y_start = 700/1050
-
-    cropped = crop_and_grayfi_property(
-        character_tab_screenshot, x_start, x_size, y_start)
-
-    return cropped
-
-
-def analyze_number_from_image(number_to_analyse):
-    # Solution heavily based on : https://www.pyimagesearch.com/2017/07/17/credit-card-ocr-with-opencv-and-python/
-
-    reference = cv2.imread(  # "tests/test_data/exocet_digits_vertical.PNG")
-        "tests/test_data/exocet_heavy_digits_reference.PNG")
+def analyze_number_from_image(image_to_analyse):
+    """
+    Solution heavily based on : https://www.pyimagesearch.com/2017/07/17/credit-card-ocr-with-opencv-and-python/
+    """
+    reference = cv2.imread("tests/test_data/exocet_heavy_digits_reference.PNG")
     reference = cv2.cvtColor(reference, cv2.COLOR_BGR2GRAY)
 
     # find contours in the image (i.e,. the outlines of the digits)
     # sort them from left to right, and initialize a dictionary to map
     # digit name to the ROI
     numbers_contours = cv2.findContours(
-        number_to_analyse, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        image_to_analyse, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     numbers_contours = imutils.grab_contours(numbers_contours)
     numbers_contours = contours.sort_contours(
         numbers_contours, method="left-to-right")[0]
-
-    # FIXME we need a dynamic solution for this. This is really dirty.
-    alma = {1: "1", 2: "1", 3: "1", 14: "2", 15: "2", 30: "3", 31: "3", 45: "4", 46: "4", 47: "4", 62: "5", 63: "5", 78: "6",
-            79: "6", 93: "7", 94: "7", 95: "7", 110: "8", 111: "8", 112: "8", 128: "9", 143: "0", 144: "0"}
-
-    convert_this_str_to_int = ""
+    string_of_numbers = ""
     for (i, c) in enumerate(numbers_contours):
 
         # compute the bounding box for the digit, extract it, and resize
         (x, y, w, h) = cv2.boundingRect(c)
-        roi = number_to_analyse[y:y + h, x:x + w]
+        roi = image_to_analyse[y:y + h, x:x + w]
         roi = invert_image(roi)
         match = cv2.matchTemplate(reference, roi, cv2.TM_CCORR_NORMED)
 
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(match)
-        #print("min_loc:{}", min_loc)
-        #print("max_loc:{}", max_loc)
-        convert_this_str_to_int += "{}".format(alma[max_loc[0]])
+        pixel_distance_from_left = max_loc[0]
 
-    return int(convert_this_str_to_int)
+        string_of_numbers += "{}".format(
+            get_number_from_ocr_location(pixel_distance_from_left))
+
+    return int(string_of_numbers)
 
 
 def opencv_fun(window_dimensions, temp_data_path):
@@ -245,6 +230,8 @@ def opencv_fun(window_dimensions, temp_data_path):
 
         frame_difference = canny_on_hue - previous_frame
         time_diff = (time.time() - last_time)
+
+        fps = 0
         if time_diff > 0:
             fps = format(1 / time_diff, '.2f')
             # print("fps:", fps)

@@ -1,0 +1,7 @@
+{
+    "include": [
+        "evil_snek"
+      ],
+      "venvPath": "venv",
+    "reportMissingImports":"none"
+}

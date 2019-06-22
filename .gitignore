@@ -16,3 +16,11 @@ __pycache__/
 
 # Jupyter checkpoints
 docs/.ipynb_checkpoints
+
+.mypy_cache
+
+
+.pytest_cache
+
+.tox
+evil_snek.egg-info
