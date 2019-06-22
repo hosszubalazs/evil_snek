@@ -2,6 +2,7 @@
 
 [![Build Status](https://dev.azure.com/hosszub/evil_snek/_apis/build/status/hosszubalazs.evil_snek?branchName=master)](https://dev.azure.com/hosszub/evil_snek/_build/latest?definitionId=1&branchName=master)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=hosszubalazs_evil_snek&metric=alert_status)](https://sonarcloud.io/dashboard?id=hosszubalazs_evil_snek)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/hosszubalazs/evil_snek/master)
 
 This repository is an attempt at creating a bot that plays Diablo 1. The game is only analysed from it's UI, not by direct memory access. The repository is in a super-early stage, with nothing useful in it for the moment.
 
@@ -10,12 +11,17 @@ This solution is heavily inspired by :
 - [Python plays Grand Theft Auto V](https://www.youtube.com/watch?v=ks4MPfMq8aQ)
 - [Credit card OCR with OpenCV and Python](https://www.pyimagesearch.com/2017/07/17/credit-card-ocr-with-opencv-and-python/)
 
+Extra resource to check:
+- [The Brood War API](https://bwapi.github.io/)
+
 ## Current state
 
 ### Understanding the game state
 
 Character recognition is solved for numbers, please check the `docs` folder for Jupyter Notebooks for examples.
 As a primer on computer vision I found the following page helpful: [Image Processing 101](https://codewords.recurse.com/issues/six/image-processing-101)
+
+Convoltions, kernel size, blurring: https://www.youtube.com/watch?v=C_zFhWdM4ic
 
 #### Character screen
 
