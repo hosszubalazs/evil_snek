@@ -7,7 +7,7 @@ from imutils import contours
 import imutils
 
 
-def custom_cropper(character_tab_screenshot, x_start_rel, x_size_rel, y_start_rel):
+def custom_cropper(character_tab_screenshot, x_start_rel: float, x_size_rel: float, y_start_rel: float):
     height = character_tab_screenshot.shape[0]
     width = character_tab_screenshot.shape[1]
     x_start_abs = int(x_start_rel * width)
