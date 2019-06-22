@@ -8,7 +8,7 @@ import imutils
 import screenshot_cropper
 
 
-class Property:
+class Descriptor:
     """
     FIXME a class might be too heavywieght for this data structure.
     Consider a named tuple: https://docs.python.org/3.7/library/collections.html#collections.namedtuple
@@ -28,49 +28,29 @@ def bw_and_normalize(image):
     return threshold_chracter_text(normalized)
 
 
-Properties = Property("xp", 470/1400, 190/1400, 125/1050), \
-    Property("nextlvl_xp", 470/1400, 190/1400, 185/1050), \
-    Property("gold", 470/1400, 190/1400, 295/1050), \
-    Property("hp", 142/640, 35/640, 293/480, bw_and_normalize), \
-    Property("hp_max", 205/1400, 70/1400, 293/480), \
-    Property("mana", 142/640, 35/640, 700/1050, bw_and_normalize), \
-    Property("mana_max", 205/1400, 70/1400, 700/1050)
+Descriptors = Descriptor("xp", 470/1400, 190/1400, 125/1050), \
+    Descriptor("nextlvl_xp", 470/1400, 190/1400, 185/1050), \
+    Descriptor("gold", 470/1400, 190/1400, 295/1050), \
+    Descriptor("hp", 142/640, 35/640, 293/480, bw_and_normalize), \
+    Descriptor("hp_max", 205/1400, 70/1400, 293/480), \
+    Descriptor("mana", 142/640, 35/640, 700/1050, bw_and_normalize), \
+    Descriptor("mana_max", 205/1400, 70/1400, 700/1050)
 
-
-
-def get_property(screenshot, property_name: str):
-    cropped_image, custom_processor = get_cropped_and_processed_property(
-        screenshot, property_name)
+def get_property_by_name( target_name: str):
+    """This is a very poor solution, used for testing"""
+    for property in Descriptors:
+        if property.name == target_name:
+            return property
+    return 0
+def get_property(screenshot, property: Descriptor):
+    cropped_image = screenshot_cropper.custom_cropper(
+        screenshot, property.xstart, property.xsize, property.ystart)
     #cv2.imwrite("cropped.png", cropped_image)
     post_processed_image = post_process_property_screenshot(
-        cropped_image, custom_processor)
+        cropped_image, property.post_processor)
     #cv2.imwrite("peepeed.png", post_processed_image)
 
     return analyze_number_from_image(post_processed_image)
-
-
-def get_cropped_and_processed_property(screenshot, property_name: str):
-    cropped_image = 0
-    custom_post_processing = 0
-    # FIXME : this complicated if structure is really not nice. devil_vision should support more dynamic picture cutting.
-    if property_name == "xp":
-        cropped_image = screenshot_cropper.crop_xp(screenshot)
-    elif property_name == "nextlvl_xp":
-        cropped_image = screenshot_cropper.crop_nextlvl_xp(screenshot)
-    elif property_name == "gold":
-        cropped_image = screenshot_cropper.crop_gold(screenshot)
-    elif property_name == "hp":
-        cropped_image = screenshot_cropper.crop_hp(screenshot)
-        custom_post_processing = bw_and_normalize
-    elif property_name == "hp_max":
-        cropped_image = screenshot_cropper.crop_hp_max(screenshot)
-    elif property_name == "mana":
-        cropped_image = screenshot_cropper.crop_mana(screenshot)
-        custom_post_processing = bw_and_normalize
-    elif property_name == "mana_max":
-        cropped_image = screenshot_cropper.crop_mana_max(screenshot)
-
-    return cropped_image, custom_post_processing
 
 
 def post_process_property_screenshot(property_screenshot, post_processing_func=0):

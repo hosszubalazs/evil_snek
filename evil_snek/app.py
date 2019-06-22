@@ -42,8 +42,8 @@ def report_character_properties(diablo_window_dimensions):
         print("Previous CSV file removed.")
 
     log_header = 'timestamp'
-    for property in devil_vision.Properties:
-        log_header += "," + property.name 
+    for descriptor in devil_vision.Descriptors:
+        log_header += "," + descriptor.name 
 
     print(log_header)
     with open(TEMP_DATA_PATH + '/' + LOG_FILE_NAME, 'a') as xp_csv:
@@ -66,9 +66,9 @@ def report_character_properties(diablo_window_dimensions):
             TEMP_DATA_PATH, "character_screen_captured.png", character_tab_screenshot)
 
         log_line = '{}'.format(time.time())
-        for property in devil_vision.Properties:
+        for descriptor in devil_vision.Descriptors:
             property_value = devil_vision.get_property(
-                character_tab_screenshot, property.name)
+                character_tab_screenshot, descriptor)
             log_line = '{},{}'.format(log_line, property_value)
 
         print(log_line)
