@@ -18,61 +18,20 @@ def custom_cropper(character_tab_screenshot, x_start_rel: float, x_size_rel: flo
                                     y_size_abs, x_start_abs:x_start_abs+x_size_abs]
 
 
-def crop_xp(character_tab_screenshot):
-    x_start = 470/1400
-    x_size = 190/1400
-    y_start = 125/1050
+def crop_belt(screenshot):
+    width = screenshot.shape[1]
+    height = screenshot.shape[0]
 
-    return custom_cropper(character_tab_screenshot, x_start, x_size, y_start)
+    # These are constants, we know the relative location
+    x_start_rel = 450/1400
+    x_size_rel = 500/1400
+    y_start_rel = 780/1050
+    y_size_rel = 62.5/1050
 
+    # Based on the actual resolution now we know the pixel perfect coordinates we need
+    x_start_abs = int(x_start_rel * width)
+    x_size_abs = int(x_size_rel * width)
+    y_start_abs = int(y_start_rel * height)
+    y_size_abs = int(y_size_rel * height)
 
-def crop_nextlvl_xp(character_tab_screenshot):
-    x_start = 470/1400
-    x_size = 190/1400
-    y_start = 185/1050
-
-    return custom_cropper(character_tab_screenshot, x_start, x_size, y_start)
-
-
-def crop_gold(character_tab_screenshot):
-    x_start = 470/1400
-    x_size = 190/1400
-    y_start = 295/1050
-
-    return custom_cropper(character_tab_screenshot, x_start, x_size, y_start)
-
-
-def crop_hp(character_tab_screenshot):
-    x_start = 142/640
-    x_size = 35/640
-    y_start = 293/480
-
-    # since the health and mana points can be colored, normalization will be needed before thresholding
-    # this is solved by an extra helper function
-    # cropped = crop_and_grayfi_property(
-    #    character_tab_screenshot, x_start, x_size, y_start, bw_and_normalize)
-    return custom_cropper(character_tab_screenshot, x_start, x_size, y_start)
-
-
-def crop_hp_max(character_tab_screenshot):
-    x_start = 205/1400
-    x_size = 70/1400
-    y_start = 293/480
-
-    return custom_cropper(character_tab_screenshot, x_start, x_size, y_start)
-
-
-def crop_mana(character_tab_screenshot):
-    x_start = 142/640
-    x_size = 35/640
-    y_start = 700/1050
-
-    return custom_cropper(character_tab_screenshot, x_start, x_size, y_start)
-
-
-def crop_mana_max(character_tab_screenshot):
-    x_start = 205/1400
-    x_size = 70/1400
-    y_start = 700/1050
-
-    return custom_cropper(character_tab_screenshot, x_start, x_size, y_start)
+    return screenshot[y_start_abs:y_start_abs + y_size_abs, x_start_abs:x_start_abs+x_size_abs]

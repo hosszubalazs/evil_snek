@@ -32,7 +32,6 @@ def create_folder(folder_path: str) -> None:
 
 def report_character_properties(diablo_window_dimensions):
 
-    create_folder(TEMP_DATA_PATH)
     # Removing previous file, starting from a clean slate
     # Structure might have changed since last run.
     try:
@@ -81,7 +80,6 @@ def report_character_properties(diablo_window_dimensions):
 
 
 def report_belt(diablo_window_dimensions):
-    create_folder(TEMP_DATA_PATH)
     # Removing previous file, starting from a clean slate
     # Structure might have changed since last run.
     try:
@@ -93,8 +91,7 @@ def report_belt(diablo_window_dimensions):
 
     while 1:
         screenshot = devil_vision.take_screenshot(diablo_window_dimensions)
-        image_of_belt = devil_vision.crop_belt(screenshot)
-        belt_contents = devil_vision.get_health_in_belt(image_of_belt)
+        belt_contents = devil_vision.get_health_in_belt(screenshot)
 
         print("belt:{}", belt_contents)
         with open(TEMP_DATA_PATH + '/' + BELT_LOG_FILE_NAME, 'a') as belt_csv:
@@ -110,6 +107,8 @@ if __name__ == '__main__':
 
     WHND, rect = fake_ui.initalize_window_handler()
     diablo_window_dimensions = devil_vision.initialize_window_size(rect)
+
+    create_folder(TEMP_DATA_PATH)
 
     xp_thread = threading.Thread(
         target=report_character_properties, args=(diablo_window_dimensions,))
