@@ -22,7 +22,7 @@ pycodestyle==2.5.0
 PyMsgBox==1.0.6
 pynput==1.4
 PyRect==0.1.4
-PyScreeze==0.1.20
+PyScreeze==0.1.26
 pytest==4.3.1
 PyTweening==1.0.3
 pytz==2018.9
