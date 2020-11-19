@@ -20,7 +20,7 @@ pluggy==0.13.1
 py==1.8.0
 pycodestyle==2.5.0
 PyMsgBox==1.0.6
-pynput==1.4
+pynput==1.7.1
 PyRect==0.1.4
 PyScreeze==0.1.26
 pytest==4.3.1
