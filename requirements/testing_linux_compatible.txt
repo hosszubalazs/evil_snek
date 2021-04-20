@@ -17,7 +17,7 @@ numpy==1.16.2
 opencv-python==4.1.0.25
 Pillow==7.1.0
 pluggy==0.13.1
-py==1.8.0
+py==1.10.0
 pycodestyle==2.5.0
 PyMsgBox==1.0.6
 pynput==1.4
