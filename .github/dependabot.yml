@@ -1,0 +1,26 @@
+version: 2
+updates:
+- package-ecosystem: pip
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "04:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: numpy
+    versions:
+    - 1.19.5
+    - 1.20.0
+    - 1.20.1
+  - dependency-name: mypy
+    versions:
+    - "0.800"
+  - dependency-name: isort
+    versions:
+    - 5.7.0
+  - dependency-name: typed-ast
+    versions:
+    - 1.4.2
+  - dependency-name: pynput
+    versions:
+    - 1.7.2
